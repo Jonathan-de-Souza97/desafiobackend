@@ -18,9 +18,8 @@ public class Vendedor {
     private TipoDeContratacao tipoDeContratacao;
     private Integer idFilial;
 
-    public Vendedor(String matricula, String nome, LocalDate dataDeNascimento, String documento, String email, TipoDeContratacao tipoDeContratacao, Integer idFilial) {
+    public Vendedor(String nome, LocalDate dataDeNascimento, String documento, String email, TipoDeContratacao tipoDeContratacao, Integer idFilial) {
         this.id = UUID.randomUUID();
-        this.matricula = matricula;
         this.nome = nome;
         this.dataDeNascimento = dataDeNascimento;
         this.documento = documento;
@@ -30,42 +29,42 @@ public class Vendedor {
     }
 
     public Boolean vendedorEhValido(){
-        if(!validaNome()){
+        if(!validarNome()){
             error = "Nome inválido";
             return false;
         }
 
-        if(!validaEmail()){
+        if(!validarEmail()){
             error = "Email inválido";
             return false;
         }
 
-        if(!validaDataNascimento()){
+        if(!validarDataNascimento()){
             error = "Idade inválida, vendedor precisa ter 16 anos completos";
             return false;
         }
 
-        if(!validaDocumentoEmBrancoOuVazio()){
+        if(!validarDocumentoEmBrancoOuVazio()){
             error = "Documento é obrigatório";
             return false;
         }
 
-        if(!validaDocumentoTodosDigitosIguais(limparDocumento(documento))){
+        if(!validarDocumentoTodosDigitosIguais(limparDocumento(documento))){
             error = "Documento inválido, todos dígitos são iguais";
             return false;
         }
 
-        if(tipoDeContratacao != TipoDeContratacao.PJ && !validaCpf()){
+        if(tipoDeContratacao != TipoDeContratacao.PJ && !validarCpf()){
             error = "CPF inválido";
             return false;
         }
 
-        if(tipoDeContratacao == TipoDeContratacao.PJ && !validaCnpj()){
+        if(tipoDeContratacao == TipoDeContratacao.PJ && !validarCnpj()){
             error = "CNPJ inválido";
             return false;
         }
 
-        if(!validaIdFilial()){
+        if(!validarIdFilial()){
             error = "Id filial deve ser maior que 0";
             return false;
         }
@@ -73,14 +72,14 @@ public class Vendedor {
         return true;
     }
 
-    private Boolean validaNome(){
+    private Boolean validarNome(){
         if(nome == null || nome.trim().isEmpty())
             return false;
 
         return Pattern.matches("^([A-Za-zÀ-ÿ]+\\s)+[A-Za-zÀ-ÿ]+$", nome);
     }
 
-    private Boolean validaDataNascimento(){
+    private Boolean validarDataNascimento(){
 
         LocalDate dataFim = LocalDate.now();
         Integer idade = Period.between(dataDeNascimento, dataFim).getYears();
@@ -91,7 +90,7 @@ public class Vendedor {
         return true;
     }
 
-    private Boolean validaDocumentoEmBrancoOuVazio(){
+    private Boolean validarDocumentoEmBrancoOuVazio(){
         Integer TamanhoValido = 11;
 
         if(documento == null || documento.trim().isEmpty())
@@ -100,7 +99,7 @@ public class Vendedor {
         return true;
     }
 
-    private Boolean validaDocumentoTodosDigitosIguais(String documento){
+    private Boolean validarDocumentoTodosDigitosIguais(String documento){
         Character primeiroDigito = documento.charAt(0);
         Boolean todosOsDigitosSaoIguais = true;
 
@@ -115,11 +114,11 @@ public class Vendedor {
         return true;
     }
 
-    private static String limparDocumento(String documento){
+    private String limparDocumento(String documento){
         return documento.replaceAll("\\D", "");
     }
 
-    private Boolean validaCpf(){
+    private Boolean validarCpf(){
 
         Integer tamanhoCpfValido = 11;
         String cpf = limparDocumento(documento);
@@ -134,8 +133,8 @@ public class Vendedor {
     private Boolean aplicarRegrasDeDigitosCPF(String cpf){
         // Referencia https://www.macoratti.net/alg_cpf.htm#:~:text=O%20algoritmo%20de%20valida%C3%A7%C3%A3o%20do,%3A%20111.444.777%2D05.
 
-        Integer primeiroDigito = calculaDigitoCPF(cpf,10);
-        Integer segundoDigito = calculaDigitoCPF(cpf,11);
+        Integer primeiroDigito = calcularDigitoCPF(cpf,10);
+        Integer segundoDigito = calcularDigitoCPF(cpf,11);
         String digitosCalculados = primeiroDigito.toString() + segundoDigito.toString();
         String digitosOriginais = cpf.substring(cpf.length() -2);
 
@@ -145,7 +144,7 @@ public class Vendedor {
         return true;
     }
 
-    private Integer calculaDigitoCPF(String cpf, Integer fator){
+    private Integer calcularDigitoCPF(String cpf, Integer fator){
         Integer total = 0;
 
         for (Character digito : cpf.toCharArray()){
@@ -158,7 +157,7 @@ public class Vendedor {
         return resto < 2 ? 0 : 11 - resto;
     }
 
-    private Boolean validaCnpj(){
+    private Boolean validarCnpj(){
 
         Integer tamanhoCnpjValido = 14;
         String cnpj = limparDocumento(documento);
@@ -173,8 +172,8 @@ public class Vendedor {
     private Boolean aplicarRegrasDeDigitosCnpj(String cnpj){
         // https://www.macoratti.net/alg_cnpj.htm#:~:text=O%20n%C3%BAmero%20que%20comp%C3%B5e%20o,que%20s%C3%A3o%20os%20d%C3%ADgitos%20verificadores.
 
-        Integer primeiroDigito = calculaDigitoCNPJ(cnpj,12);
-        Integer segundoDigito = calculaDigitoCNPJ(cnpj,13);
+        Integer primeiroDigito = calcularDigitoCNPJ(cnpj,12);
+        Integer segundoDigito = calcularDigitoCNPJ(cnpj,13);
         String digitosCalculados  = primeiroDigito.toString() + segundoDigito.toString();
         String digitosOriginais  = cnpj.substring(cnpj.length() -2);
 
@@ -184,7 +183,7 @@ public class Vendedor {
         return true;
     }
 
-    private Integer calculaDigitoCNPJ(String cnpj, Integer posicao){
+    private Integer calcularDigitoCNPJ(String cnpj, Integer posicao){
         int[] pesos;
 
         if(posicao == 12){
@@ -207,14 +206,14 @@ public class Vendedor {
         return resto < 2 ? 0 : 11 - resto;
     }
 
-    private Boolean validaEmail(){
+    private Boolean validarEmail(){
         if(email == null || email.trim().isEmpty())
             return false;
 
         return Pattern.matches("^(.+)\\@(.+)$", email);
     }
 
-    private Boolean validaIdFilial(){
+    private Boolean validarIdFilial(){
 
         return idFilial > 0;
     }
@@ -253,5 +252,13 @@ public class Vendedor {
 
     public String getError() {
         return error;
+    }
+
+    public void setMatricula(int numeroMatricula, TipoDeContratacao tipoDeContratacao) {
+        this.matricula = String.format("%08d-%s", numeroMatricula,
+                switch (tipoDeContratacao){case PJ -> "PJ";
+                                           case CLT -> "CLT";
+                                           case Outsourcing -> "OUT";
+        });
     }
 }

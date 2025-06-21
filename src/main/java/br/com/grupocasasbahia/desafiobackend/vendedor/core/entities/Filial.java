@@ -1,4 +1,4 @@
-package br.com.grupocasasbahia.desafiobackend.vendedor.core.valueobjects;
+package br.com.grupocasasbahia.desafiobackend.vendedor.core.entities;
 
 import java.sql.Timestamp;
 import java.util.UUID;
