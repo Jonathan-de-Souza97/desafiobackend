@@ -16,19 +16,29 @@ public class Vendedor {
     private String documento;
     private String email;
     private TipoDeContratacao tipoDeContratacao;
-    private Integer idFilial;
+    private Integer numeroFilial;
 
-    public Vendedor(String nome, LocalDate dataDeNascimento, String documento, String email, TipoDeContratacao tipoDeContratacao, Integer idFilial) {
+    public Vendedor(String nome, LocalDate dataDeNascimento, String documento, String email, TipoDeContratacao tipoDeContratacao, Integer numeroFilial) {
         this.id = UUID.randomUUID();
         this.nome = nome;
         this.dataDeNascimento = dataDeNascimento;
         this.documento = documento;
         this.email = email;
         this.tipoDeContratacao = tipoDeContratacao;
-        this.idFilial = idFilial;
+        this.numeroFilial = numeroFilial;
     }
 
-    public Boolean vendedorEhValido(){
+    public Vendedor(String matricula, String nome, LocalDate dataDeNascimento, String documento, String email, TipoDeContratacao tipoDeContratacao, Integer numeroFilial) {
+        this.matricula = matricula;
+        this.nome = nome;
+        this.dataDeNascimento = dataDeNascimento;
+        this.documento = documento;
+        this.email = email;
+        this.tipoDeContratacao = tipoDeContratacao;
+        this.numeroFilial = numeroFilial;
+    }
+
+    public Boolean ehValido(){
         if(!validarNome()){
             error = "Nome inválido";
             return false;
@@ -64,7 +74,7 @@ public class Vendedor {
             return false;
         }
 
-        if(!validarIdFilial()){
+        if(!validarnumeroFilial()){
             error = "Id filial deve ser maior que 0";
             return false;
         }
@@ -213,9 +223,9 @@ public class Vendedor {
         return Pattern.matches("^(.+)\\@(.+)$", email);
     }
 
-    private Boolean validarIdFilial(){
+    private Boolean validarnumeroFilial(){
 
-        return idFilial > 0;
+        return numeroFilial > 0;
     }
 
     public UUID getId() {
@@ -246,8 +256,8 @@ public class Vendedor {
         return tipoDeContratacao;
     }
 
-    public Integer getIdFilial() {
-        return idFilial;
+    public Integer getnumeroFilial() {
+        return numeroFilial;
     }
 
     public String getError() {
