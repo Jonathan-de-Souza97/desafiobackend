@@ -36,6 +36,7 @@ public class CriarVendedorUseCase implements ICriarVendedor {
         vendedor.setMatricula(buscaNovaMatricula.getDados(), vendedor.getTipoDeContratacao());
 
         Resposta<Vendedor> verificarSeDocumentoJaExiste = _repository.buscarPorDocumento(input.documento()).join();
+
         if(!verificarSeDocumentoJaExiste.Sucedido())
             return completedFuture(Resposta.erro("Falha interna, tente novamente"));
 
@@ -46,7 +47,7 @@ public class CriarVendedorUseCase implements ICriarVendedor {
 
         if(!salvarVendedor.Sucedido())
             return completedFuture(Resposta.erro("Falha interna tente novamente"));
-        
+
         OutputCriarUsuario output = new OutputCriarUsuario(salvarVendedor.getDados());
         return completedFuture(Resposta.successo(output));
     }

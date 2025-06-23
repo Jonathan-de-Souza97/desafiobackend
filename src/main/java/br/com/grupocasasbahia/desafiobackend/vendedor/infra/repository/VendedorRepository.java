@@ -4,19 +4,20 @@ import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IVe
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.response.Resposta;
 import br.com.grupocasasbahia.desafiobackend.vendedor.core.entities.Vendedor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.core.enums.TipoDeContratacao;
-import br.com.grupocasasbahia.desafiobackend.vendedor.infra.interfaces.ConexaoBancoDeDados;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Connection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Repository
 public class VendedorRepository implements IVendedorRepository {
 
-    private final ConexaoBancoDeDados _conexao;
+    private final JdbcTemplate _conexao;
 
-    public VendedorRepository(ConexaoBancoDeDados conexao) {
+    public VendedorRepository(JdbcTemplate conexao) {
         _conexao = conexao;
     }
 
@@ -25,7 +26,7 @@ public class VendedorRepository implements IVendedorRepository {
         String query = "SELECT * FROM vendedor WHERE matricula = ?";
 
         try {
-            List<Vendedor> vendedores = _conexao.query(
+            List<Vendedor> vendedor = _conexao.query(
                     query,
                     new Object[]{matricula},
                     (rs, rowNum) -> new Vendedor(
@@ -38,10 +39,10 @@ public class VendedorRepository implements IVendedorRepository {
                             rs.getInt("numero_filial")                   )
             );
 
-            if (vendedores.isEmpty())
-                return CompletableFuture.completedFuture(Resposta.erro("Vendedor não encontrado"));
+            if(vendedor.isEmpty())
+                return CompletableFuture.completedFuture(Resposta.successo(null));
 
-            return CompletableFuture.completedFuture(Resposta.successo(vendedores.get(0)));
+            return CompletableFuture.completedFuture(Resposta.successo(vendedor.get(0)));
 
         } catch (Exception e) {
             return CompletableFuture.completedFuture(Resposta.erro("Erro ao buscar vendedor: " + e.getMessage()));
@@ -50,7 +51,26 @@ public class VendedorRepository implements IVendedorRepository {
 
     @Override
     public CompletableFuture<Resposta<Vendedor>> buscarPorDocumento(String documento) {
-        return null;
+        String query = "SELECT * FROM vendedor WHERE documento = ?";
+        try {
+            List<Vendedor> vendedor = _conexao.query(query, new Object[]{documento}, (rs,rowNum) ->
+                    new Vendedor(rs.getString("matricula"),
+                            rs.getString("nome"),
+                            rs.getDate("datadenascimento").toLocalDate(),
+                            rs.getString("documento"),
+                            rs.getString("email"),
+                            TipoDeContratacao.converteAPartirDoCodigo(rs.getInt("tipodecontratacao")),
+                            rs.getInt("numerofilial"))
+            );
+
+            if(vendedor.isEmpty())
+                return CompletableFuture.completedFuture(Resposta.successo(null));
+
+            return CompletableFuture.completedFuture(Resposta.successo(vendedor.get(0)));
+        }
+        catch (Exception ex){
+            return CompletableFuture.completedFuture(Resposta.erro("Erro ao buscar vendedor:" + ex.getMessage()));
+        }
     }
 
     @Override
@@ -60,12 +80,49 @@ public class VendedorRepository implements IVendedorRepository {
 
     @Override
     public CompletableFuture<Resposta<Integer>> buscarNovaMatricula() {
-        return null;
+        String querySelect = "SELECT ultimocodigo FROM controlesequenciamentomatricula FOR UPDATE";
+        String queryUpdate = "UPDATE controlesequenciamentomatricula SET ultimocodigo = ?";
+
+        try {
+            Connection connection = _conexao.getDataSource().getConnection();
+            connection.setAutoCommit(false);
+
+            JdbcTemplate jdbcComTransacao = new JdbcTemplate(new SingleConnectionDataSource(connection, true));
+
+            List<Integer> resultado = jdbcComTransacao.query(
+                    querySelect,
+                    new Object[]{},
+                    (rs, rowNum) -> rs.getInt("ultimocodigo")
+            );
+
+            int novoCodigo = resultado.get(0) + 1;
+
+            jdbcComTransacao.update(queryUpdate, novoCodigo);
+
+            connection.commit();
+            connection.close();
+
+            return CompletableFuture.completedFuture(Resposta.successo(novoCodigo));
+
+        } catch (Exception e) {
+            return CompletableFuture.completedFuture(Resposta.erro("Erro ao buscar nova matrícula: " + e.getMessage()));
+        }
     }
 
     @Override
     public CompletableFuture<Resposta<String>> salvar(Vendedor vendedor) {
-        return null;
+        String query = "INSERT INTO vendedor (id, matricula, nome, datadenascimento, documento, email, tipodecontratacao,numerofilial)" +
+                       " VALUES " +
+                       "(?,?,?,?,?,?,?,?)";
+        try{
+            _conexao.update(query, new Object[]{vendedor.getId(), vendedor.getMatricula(), vendedor.getNome(),vendedor.getDataDeNascimento(),
+                    vendedor.getDocumento(), vendedor.getEmail(), vendedor.getTipoDeContratacao().name(), vendedor.getnumeroFilial()});
+
+            return CompletableFuture.completedFuture(Resposta.successo((vendedor.getMatricula())));
+        }
+        catch (Exception ex){
+            return CompletableFuture.completedFuture(Resposta.erro("Falha ao salvar vendedor: " + ex.getMessage()));
+        }
     }
 
     @Override

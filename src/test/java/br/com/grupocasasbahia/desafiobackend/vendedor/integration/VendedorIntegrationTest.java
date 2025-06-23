@@ -6,11 +6,14 @@ import br.com.grupocasasbahia.desafiobackend.vendedor.core.enums.TipoDeContratac
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
 import java.time.LocalDate;
 
+@ActiveProfiles("test")
 @SpringBootTest
 public class VendedorIntegrationTest {
 
@@ -32,6 +35,6 @@ public class VendedorIntegrationTest {
         var resultado = _criarVendedorUseCase.executeAsync(input).join();
 
         //assert
-        assertEquals("Falha interna, tente novamente", resultado.getMensagem());
+        assertEquals("00000001-PJ", resultado.getDados().matricula());
     }
 }
