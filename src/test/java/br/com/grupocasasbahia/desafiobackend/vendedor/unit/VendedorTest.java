@@ -25,11 +25,11 @@ public class VendedorTest {
         Vendedor vendedor = new Vendedor(nome,dataNascimento,cpf,email, TipoDeContratacao.CLT,1);
 
         //assert
-        assertTrue(vendedor.ehValido());
+        assertTrue(vendedor.valido());
         assertNotNull(vendedor.getId());
         assertEquals(nome, vendedor.getNome());
         assertEquals(dataNascimento, vendedor.getDataDeNascimento());
-        assertEquals(cpf, vendedor.getDocumento());
+        assertEquals("54298394000", vendedor.getDocumento());
         assertEquals(email, vendedor.getEmail());
     }
 
@@ -46,7 +46,7 @@ public class VendedorTest {
         Vendedor vendedor = new Vendedor(nome,dataNascimento,cnpj,email, TipoDeContratacao.PJ,1);
 
         //assert
-        assertTrue(vendedor.ehValido());
+        assertTrue(vendedor.valido());
         assertNotNull(vendedor.getId());
         assertEquals(nome, vendedor.getNome());
         assertEquals(dataNascimento, vendedor.getDataDeNascimento());
@@ -67,7 +67,7 @@ public class VendedorTest {
         Vendedor vendedor = new Vendedor(nome,dataNascimento,cpf,email, TipoDeContratacao.CLT,1);
 
         //assert
-        assertFalse(vendedor.ehValido());
+        assertFalse(vendedor.valido());
         assertEquals("Nome inválido", vendedor.getError());
     }
 
@@ -83,7 +83,7 @@ public class VendedorTest {
         Vendedor vendedor = new Vendedor(nome,dataNascimento,cpf,email, TipoDeContratacao.CLT,1);
 
         //assert
-        assertFalse(vendedor.ehValido());
+        assertFalse(vendedor.valido());
         assertEquals("Email inválido", vendedor.getError());
     }
 
@@ -99,7 +99,7 @@ public class VendedorTest {
         Vendedor vendedor = new Vendedor(nome,dataNascimento,cpf,email, TipoDeContratacao.CLT,1);
 
         //assert
-        assertFalse(vendedor.ehValido());
+        assertFalse(vendedor.valido());
         assertEquals("Idade inválida, vendedor precisa ter 16 anos completos", vendedor.getError());
     }
 
@@ -115,7 +115,7 @@ public class VendedorTest {
         Vendedor vendedor = new Vendedor(nome,dataNascimento,cpf,email, TipoDeContratacao.CLT,1);
 
         //assert
-        assertFalse(vendedor.ehValido());
+        assertFalse(vendedor.valido());
         assertEquals("Documento é obrigatório", vendedor.getError());
     }
 
@@ -131,7 +131,7 @@ public class VendedorTest {
         Vendedor vendedor = new Vendedor(nome,dataNascimento,cpf,email, TipoDeContratacao.CLT,1);
 
         //assert
-        assertFalse(vendedor.ehValido());
+        assertFalse(vendedor.valido());
         assertEquals("Documento inválido, todos dígitos são iguais", vendedor.getError());
     }
 
@@ -147,7 +147,7 @@ public class VendedorTest {
         Vendedor vendedor = new Vendedor(nome,dataNascimento,cpf,email, TipoDeContratacao.CLT,1);
 
         //assert
-        assertFalse(vendedor.ehValido());
+        assertFalse(vendedor.valido());
         assertEquals("CPF inválido", vendedor.getError());
     }
 
@@ -163,7 +163,7 @@ public class VendedorTest {
         Vendedor vendedor = new Vendedor(nome,dataNascimento,cnpj,email, TipoDeContratacao.CLT,1);
 
         //assert
-        assertFalse(vendedor.ehValido());
+        assertFalse(vendedor.valido());
         assertEquals("CPF inválido", vendedor.getError());
     }
 
@@ -180,7 +180,7 @@ public class VendedorTest {
         Vendedor vendedor = new Vendedor(nome,dataNascimento,cpf,email, TipoDeContratacao.CLT,0);
 
         //assert
-        assertFalse(vendedor.ehValido());
+        assertFalse(vendedor.valido());
         assertEquals("Id filial deve ser maior que 0", vendedor.getError());
     }
 

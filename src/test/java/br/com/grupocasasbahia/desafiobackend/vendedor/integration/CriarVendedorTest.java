@@ -37,8 +37,8 @@ public class CriarVendedorTest {
         //assert
         assertTrue(resultado.Sucedido());
         assertEquals("Operação realizada", resultado.getMensagem());
-        assertEquals(11,resultado.getDados().matricula().length());
-        assertEquals("PJ",resultado.getDados().matricula().substring(resultado.getDados().matricula().length() -2));
+        assertEquals(11,resultado.getDados().length());
+        assertEquals("PJ",resultado.getDados().substring(resultado.getDados().length() -2));
     }
 
     @Test
@@ -58,8 +58,8 @@ public class CriarVendedorTest {
         //assert
         assertTrue(resultado.Sucedido());
         assertEquals("Operação realizada", resultado.getMensagem());
-        assertEquals(12,resultado.getDados().matricula().length());
-        assertEquals("CLT",resultado.getDados().matricula().substring(resultado.getDados().matricula().length() -3));
+        assertEquals(12,resultado.getDados().length());
+        assertEquals("CLT",resultado.getDados().substring(resultado.getDados().length() -3));
     }
 
     @Test
@@ -79,8 +79,8 @@ public class CriarVendedorTest {
         //assert
         assertTrue(resultado.Sucedido());
         assertEquals("Operação realizada", resultado.getMensagem());
-        assertEquals(12,resultado.getDados().matricula().length());
-        assertEquals("OUT",resultado.getDados().matricula().substring(resultado.getDados().matricula().length() -3));
+        assertEquals(12,resultado.getDados().length());
+        assertEquals("OUT",resultado.getDados().substring(resultado.getDados().length() -3));
     }
 
     @Test

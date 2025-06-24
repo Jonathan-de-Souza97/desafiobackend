@@ -3,7 +3,6 @@ package br.com.grupocasasbahia.desafiobackend.vendedor.integration;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.inputs.InputCriarVendedor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IApagarVendedor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.ICriarVendedor;
-import br.com.grupocasasbahia.desafiobackend.vendedor.application.outputs.OutputCriarUsuario;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.response.Resposta;
 import br.com.grupocasasbahia.desafiobackend.vendedor.core.enums.TipoDeContratacao;
 import org.junit.jupiter.api.Test;
@@ -38,13 +37,13 @@ public class ApagarVendedorTest {
 
         //act
         InputCriarVendedor input = new InputCriarVendedor(nome, dataNascimento, documento, email,tipoContratacao, numeroFilial);
-        Resposta<OutputCriarUsuario> vendedor = _criarVendedorUseCase.executeAsync(input).join();
-        Resposta<String> resultado = _apagarVendedorUseCase.executeAsync(vendedor.getDados().matricula()).join();
+        Resposta<String> vendedor = _criarVendedorUseCase.executeAsync(input).join();
+        Resposta<String> resultado = _apagarVendedorUseCase.executeAsync(vendedor.getDados()).join();
 
         //Assert
         assertTrue(resultado.Sucedido());
         assertEquals("Operação realizada", resultado.getMensagem());
-        assertEquals(vendedor.getDados().matricula(), resultado.getDados());
+        assertEquals(vendedor.getDados(), resultado.getDados());
     }
 
     @Test

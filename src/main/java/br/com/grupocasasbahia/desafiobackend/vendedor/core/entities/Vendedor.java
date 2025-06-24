@@ -22,7 +22,7 @@ public class Vendedor {
         this.id = UUID.randomUUID();
         this.nome = nome;
         this.dataDeNascimento = dataDeNascimento;
-        this.documento = documento;
+        this.documento = limparDocumento(documento);
         this.email = email;
         this.tipoDeContratacao = tipoDeContratacao;
         this.numeroFilial = numeroFilial;
@@ -38,7 +38,7 @@ public class Vendedor {
         this.numeroFilial = numeroFilial;
     }
 
-    public Boolean ehValido(){
+    public Boolean valido(){
         if(!validarNome()){
             error = "Nome inválido";
             return false;

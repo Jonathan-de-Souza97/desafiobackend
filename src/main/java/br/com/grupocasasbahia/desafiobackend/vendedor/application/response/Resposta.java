@@ -5,9 +5,6 @@ public class Resposta<T> {
     private String Mensagem;
     private T Dados;
 
-    public Resposta() {
-    }
-
     public Resposta(boolean sucesso, String mensagem, T dados){
         Sucesso = sucesso;
         Mensagem = mensagem;

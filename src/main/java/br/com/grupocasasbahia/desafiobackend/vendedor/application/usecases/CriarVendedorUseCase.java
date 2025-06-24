@@ -3,7 +3,6 @@ package br.com.grupocasasbahia.desafiobackend.vendedor.application.usecases;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.inputs.InputCriarVendedor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.ICriarVendedor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IVendedorRepository;
-import br.com.grupocasasbahia.desafiobackend.vendedor.application.outputs.OutputCriarUsuario;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.response.Resposta;
 import br.com.grupocasasbahia.desafiobackend.vendedor.core.entities.Vendedor;
 import org.springframework.stereotype.Service;
@@ -23,9 +22,9 @@ public class CriarVendedorUseCase implements ICriarVendedor {
     }
 
     @Override
-    public CompletableFuture<Resposta<OutputCriarUsuario>> executeAsync(InputCriarVendedor input) {
+    public CompletableFuture<Resposta<String>> executeAsync(InputCriarVendedor input) {
         Vendedor vendedor = input.toEntity();
-        if(!vendedor.ehValido())
+        if(!vendedor.valido())
             return completedFuture(erro(vendedor.getError()));
 
         Resposta<Integer> buscaNovaMatricula = _repository.buscarNovaMatricula().join();
@@ -35,7 +34,7 @@ public class CriarVendedorUseCase implements ICriarVendedor {
 
         vendedor.setMatricula(buscaNovaMatricula.getDados(), vendedor.getTipoDeContratacao());
 
-        Resposta<Vendedor> verificarSeDocumentoJaExiste = _repository.buscarPorDocumento(input.documento()).join();
+        Resposta<Vendedor> verificarSeDocumentoJaExiste = _repository.buscarPorDocumento(vendedor.getDocumento()).join();
 
         if(!verificarSeDocumentoJaExiste.Sucedido())
             return completedFuture(Resposta.erro("Falha interna, tente novamente"));
@@ -48,7 +47,6 @@ public class CriarVendedorUseCase implements ICriarVendedor {
         if(!salvarVendedor.Sucedido())
             return completedFuture(Resposta.erro("Falha interna tente novamente"));
 
-        OutputCriarUsuario output = new OutputCriarUsuario(salvarVendedor.getDados());
-        return completedFuture(Resposta.successo(output));
+        return completedFuture(Resposta.successo(salvarVendedor.getDados()));
     }
 }

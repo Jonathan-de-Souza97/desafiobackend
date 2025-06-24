@@ -127,7 +127,29 @@ public class VendedorRepository implements IVendedorRepository {
 
     @Override
     public CompletableFuture<Resposta<String>> editar(Vendedor vendedor) {
-        return null;
+        String query = "UPDATE vendedor SET " +
+                       "nome = ?, " +
+                       "datadenascimento = ?, " +
+                       "documento = ?, " +
+                       "email = ?, " +
+                       "tipodecontratacao = ?, " +
+                       "numeroFilial = ? " +
+                       "WHERE matricula = ?";
+
+        try{
+            _conexao.update(query, new Object[]{vendedor.getNome(),
+                    vendedor.getDataDeNascimento(),
+                    vendedor.getDocumento(),
+                    vendedor.getEmail(),
+                    vendedor.getTipoDeContratacao().name(),
+                    vendedor.getnumeroFilial(),
+                    vendedor.getMatricula()});
+
+            return CompletableFuture.completedFuture(Resposta.successo(vendedor.getMatricula()));
+        }
+        catch (Exception ex){
+            return CompletableFuture.completedFuture(Resposta.erro("Falha ao editar vendedor: " + ex.getMessage()));
+        }
     }
 
     @Override
