@@ -18,7 +18,7 @@ public class VendedorTest {
         //arrange
         String nome = "Jonathan de Souza";
         LocalDate dataNascimento = LocalDate.parse("1997-01-24");
-        String cpf = "42184073806";
+        String cpf = "542.983.940-00";
         String email = "john@gmail.com";
 
         //act

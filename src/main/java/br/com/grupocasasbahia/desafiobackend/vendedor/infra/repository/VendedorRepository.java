@@ -32,11 +32,11 @@ public class VendedorRepository implements IVendedorRepository {
                     (rs, rowNum) -> new Vendedor(
                             rs.getString("matricula"),
                             rs.getString("nome"),
-                            rs.getDate("dataDeNascimento").toLocalDate(),
+                            rs.getDate("datadenascimento").toLocalDate(),
                             rs.getString("documento"),
                             rs.getString("email"),
-                            TipoDeContratacao.converteAPartirDoCodigo(rs.getInt("tipoDeContratacao")),
-                            rs.getInt("numero_filial")                   )
+                            TipoDeContratacao.valueOf(rs.getString("tipodecontratacao")),
+                            rs.getInt("numerofilial"))
             );
 
             if(vendedor.isEmpty())
@@ -59,7 +59,7 @@ public class VendedorRepository implements IVendedorRepository {
                             rs.getDate("datadenascimento").toLocalDate(),
                             rs.getString("documento"),
                             rs.getString("email"),
-                            TipoDeContratacao.converteAPartirDoCodigo(rs.getInt("tipodecontratacao")),
+                            TipoDeContratacao.valueOf(rs.getString("tipodecontratacao")),
                             rs.getInt("numerofilial"))
             );
 
@@ -132,6 +132,15 @@ public class VendedorRepository implements IVendedorRepository {
 
     @Override
     public CompletableFuture<Resposta<String>> apagar(String matricula) {
-        return null;
+        String query = "DELETE FROM vendedor WHERE matricula = ?";
+
+        try{
+            _conexao.update(query,new Object[]{matricula});
+
+            return CompletableFuture.completedFuture(Resposta.successo(matricula));
+        }
+        catch (Exception ex){
+            return CompletableFuture.completedFuture(Resposta.erro("Falha ao apagar vendedor"));
+        }
     }
 }
