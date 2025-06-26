@@ -32,7 +32,7 @@ public class Vendedor {
         this.matricula = matricula;
         this.nome = nome;
         this.dataDeNascimento = dataDeNascimento;
-        this.documento = documento;
+        this.documento = limparDocumento(documento);
         this.email = email;
         this.tipoDeContratacao = tipoDeContratacao;
         this.numeroFilial = numeroFilial;
@@ -90,6 +90,9 @@ public class Vendedor {
     }
 
     private Boolean validarDataNascimento(){
+
+        if(dataDeNascimento == null)
+            return true;
 
         LocalDate dataFim = LocalDate.now();
         Integer idade = Period.between(dataDeNascimento, dataFim).getYears();
@@ -173,7 +176,7 @@ public class Vendedor {
         String cnpj = limparDocumento(documento);
         Integer tamanhoCnpj = cnpj.length();
 
-        if(tipoDeContratacao != TipoDeContratacao.PJ && tamanhoCnpj != tamanhoCnpjValido)
+        if(tipoDeContratacao == TipoDeContratacao.PJ && tamanhoCnpj != tamanhoCnpjValido)
             return false;
 
         return aplicarRegrasDeDigitosCnpj(cnpj);

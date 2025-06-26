@@ -160,11 +160,11 @@ public class VendedorTest {
         LocalDate dataNascimento = LocalDate.parse("1997-01-24");
 
         //act
-        Vendedor vendedor = new Vendedor(nome,dataNascimento,cnpj,email, TipoDeContratacao.CLT,1);
+        Vendedor vendedor = new Vendedor(nome,dataNascimento,cnpj,email, TipoDeContratacao.PJ,1);
 
         //assert
         assertFalse(vendedor.valido());
-        assertEquals("CPF inválido", vendedor.getError());
+        assertEquals("CNPJ inválido", vendedor.getError());
     }
 
     @Test
