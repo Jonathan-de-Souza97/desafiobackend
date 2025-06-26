@@ -5,35 +5,43 @@ create schema desafiobackend;
 create schema desafiobackendtest;
 
 create table desafiobackend.vendedor (
-	id uuid,
-	matricula text,
-	nome text,
-	dataDeNascimento DATE,
-	documento text,
-	email text,
-	tipoDeContratacao text,
-	numeroFilial integer,
+	id uuid NOT NULL,
+	matricula text NOT NULL,
+	nome text NOT NULL,
+	dataDeNascimento date,
+	documento text NOT NULL,
+	email text NOT NULL,
+	tipoDeContratacao text NOT NULL,
+	numeroFilial integer NOT NULL,
 	primary key (id)
 );
+
+CREATE INDEX idx_matricula ON desafiobackend.vendedor (matricula);
+CREATE INDEX idx_documento_tipoContratacao ON desafiobackend.vendedor (matricula, tipoDeContratacao);
 
 create table desafiobackendtest.vendedor (
-	id uuid,
-	matricula text,
-	nome text,
-	dataDeNascimento DATE,
-	documento text,
-	email text,
-	tipoDeContratacao text,
-	numeroFilial integer,
+	id uuid NOT NULL,
+	matricula text NOT NULL,
+	nome text NOT NULL,
+	dataDeNascimento date,
+	documento text NOT NULL,
+	email text NOT NULL,
+	tipoDeContratacao text NOT NULL,
+	numeroFilial integer NOT NULL,
 	primary key (id)
 );
 
+CREATE INDEX idx_matricula ON desafiobackendtest.vendedor (matricula);
+CREATE INDEX idx_documento_tipoContratacao ON desafiobackendtest.vendedor (matricula, tipoDeContratacao);
+
 create table desafiobackend.controlesequenciamentomatricula (
-	ultimoCodigo integer
+	ultimoCodigo integer,
+	primary key (ultimoCodigo)
 );
 
 create table desafiobackendtest.controlesequenciamentomatricula (
-	ultimoCodigo integer
+	ultimoCodigo integer,
+	primary key (ultimoCodigo)
 );
 
 insert into desafiobackend.controlesequenciamentomatricula
