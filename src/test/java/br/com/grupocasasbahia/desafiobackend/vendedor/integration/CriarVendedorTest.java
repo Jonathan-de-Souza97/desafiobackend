@@ -63,6 +63,27 @@ public class CriarVendedorTest {
     }
 
     @Test
+    public void DeveCadastrarVendedorComDataNascimentoNull(){
+        //arrange
+        String nome = "Jonathan de Souza";
+        LocalDate dataNascimento = null;
+        String documento = "449.382.090-04";
+        String email = "john@gmail.com";
+        TipoDeContratacao tipoContratacao = TipoDeContratacao.CLT;
+        int numeroFilial = 1;
+
+        //act
+        InputCriarVendedor input = new InputCriarVendedor(nome, dataNascimento, documento, email,tipoContratacao, numeroFilial);
+        var resultado = _criarVendedorUseCase.executeAsync(input).join();
+
+        //assert
+        assertTrue(resultado.Sucedido());
+        assertEquals("Operação realizada", resultado.getMensagem());
+        assertEquals(12,resultado.getDados().length());
+        assertEquals("CLT",resultado.getDados().substring(resultado.getDados().length() -3));
+    }
+
+    @Test
     public void DeveCadastrarVendedorOUT(){
         //arrange
         String nome = "Jonathan de Souza";
@@ -100,7 +121,7 @@ public class CriarVendedorTest {
 
         //assert
         assertFalse(resultado.Sucedido());
-        assertEquals("Documento já cadastrado", resultado.getMensagem());
+        assertEquals("Documento já cadastrado para esse tipo de contratação", resultado.getMensagem());
         assertNull(resultado.getDados());
     }
 
@@ -121,6 +142,26 @@ public class CriarVendedorTest {
         //assert
         assertFalse(resultado.Sucedido());
         assertEquals("Email inválido", resultado.getMensagem());
+        assertNull(resultado.getDados());
+    }
+
+    @Test
+    public void NaoDeveCadastrarVendedorFilialNaoCadastrada(){
+        //arrange
+        String nome = "Jonathan de Souza";
+        LocalDate dataNascimento = LocalDate.parse("1997-01-24");
+        String documento = "956.356.060-40";
+        String email = "john@gmail.com";
+        TipoDeContratacao tipoContratacao = TipoDeContratacao.Outsourcing;
+        int numeroFilial = 4;
+
+        //act
+        InputCriarVendedor input = new InputCriarVendedor(nome, dataNascimento, documento, email,tipoContratacao, numeroFilial);
+        var resultado = _criarVendedorUseCase.executeAsync(input).join();
+
+        //assert
+        assertFalse(resultado.Sucedido());
+        assertEquals("Filial não cadastrada", resultado.getMensagem());
         assertNull(resultado.getDados());
     }
 }

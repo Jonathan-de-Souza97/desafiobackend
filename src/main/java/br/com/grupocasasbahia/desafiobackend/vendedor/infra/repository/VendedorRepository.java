@@ -22,27 +22,20 @@ public class VendedorRepository implements IVendedorRepository {
     }
 
     @Override
-    public CompletableFuture<Resposta<Vendedor>> buscarPorMatricula(String matricula) {
-        String query = "SELECT * FROM vendedor WHERE matricula = ?";
+    public CompletableFuture<Resposta<String>> buscarPorMatricula(String matricula) {
+        String query = "SELECT matricula FROM vendedor WHERE matricula = ?";
 
         try {
-            List<Vendedor> vendedor = _conexao.query(
+            List<String> matriculaRetorno = _conexao.query(
                     query,
                     new Object[]{matricula},
-                    (rs, rowNum) -> new Vendedor(
-                            rs.getString("matricula"),
-                            rs.getString("nome"),
-                            rs.getDate("datadenascimento").toLocalDate(),
-                            rs.getString("documento"),
-                            rs.getString("email"),
-                            TipoDeContratacao.valueOf(rs.getString("tipodecontratacao")),
-                            rs.getInt("numerofilial"))
+                    (rs, rowNum) -> (rs.getString("matricula"))
             );
 
-            if(vendedor.isEmpty())
+            if(matriculaRetorno.isEmpty())
                 return CompletableFuture.completedFuture(Resposta.successo(null));
 
-            return CompletableFuture.completedFuture(Resposta.successo(vendedor.get(0)));
+            return CompletableFuture.completedFuture(Resposta.successo(matriculaRetorno.get(0)));
 
         } catch (Exception e) {
             return CompletableFuture.completedFuture(Resposta.erro("Erro ao buscar vendedor: " + e.getMessage()));
@@ -50,32 +43,21 @@ public class VendedorRepository implements IVendedorRepository {
     }
 
     @Override
-    public CompletableFuture<Resposta<Vendedor>> buscarPorDocumento(String documento) {
-        String query = "SELECT * FROM vendedor WHERE documento = ?";
+    public CompletableFuture<Resposta<String>> buscarPorDocumentoETipoDeContratacao(String documento, TipoDeContratacao tipoDeContratacao) {
+        String query = "SELECT matricula FROM vendedor WHERE documento = ? AND tipodecontratacao = ?";
         try {
-            List<Vendedor> vendedor = _conexao.query(query, new Object[]{documento}, (rs,rowNum) ->
-                    new Vendedor(rs.getString("matricula"),
-                            rs.getString("nome"),
-                            rs.getDate("datadenascimento").toLocalDate(),
-                            rs.getString("documento"),
-                            rs.getString("email"),
-                            TipoDeContratacao.valueOf(rs.getString("tipodecontratacao")),
-                            rs.getInt("numerofilial"))
+            List<String> matricula =  _conexao.query(query, new Object[]{documento, tipoDeContratacao.name()},
+                    (rs,rowNum) -> (rs.getString("matricula"))
             );
 
-            if(vendedor.isEmpty())
+            if(matricula.isEmpty())
                 return CompletableFuture.completedFuture(Resposta.successo(null));
 
-            return CompletableFuture.completedFuture(Resposta.successo(vendedor.get(0)));
+            return CompletableFuture.completedFuture(Resposta.successo(matricula.get(0)));
         }
         catch (Exception ex){
             return CompletableFuture.completedFuture(Resposta.erro("Erro ao buscar vendedor:" + ex.getMessage()));
         }
-    }
-
-    @Override
-    public CompletableFuture<Resposta<List<Vendedor>>> buscarTodos() {
-        return null;
     }
 
     @Override
@@ -126,9 +108,10 @@ public class VendedorRepository implements IVendedorRepository {
     }
 
     @Override
-    public CompletableFuture<Resposta<String>> editar(Vendedor vendedor) {
+    public CompletableFuture<Resposta<String>> editar(String matriculaAEditar, Vendedor vendedor) {
         String query = "UPDATE vendedor SET " +
-                       "nome = ?, " +
+                       "matricula = ?, " +
+                        "nome = ?, " +
                        "datadenascimento = ?, " +
                        "documento = ?, " +
                        "email = ?, " +
@@ -137,13 +120,15 @@ public class VendedorRepository implements IVendedorRepository {
                        "WHERE matricula = ?";
 
         try{
-            _conexao.update(query, new Object[]{vendedor.getNome(),
+            _conexao.update(query, new Object[]{
+                    vendedor.getMatricula(),
+                    vendedor.getNome(),
                     vendedor.getDataDeNascimento(),
                     vendedor.getDocumento(),
                     vendedor.getEmail(),
                     vendedor.getTipoDeContratacao().name(),
                     vendedor.getnumeroFilial(),
-                    vendedor.getMatricula()});
+                    matriculaAEditar});
 
             return CompletableFuture.completedFuture(Resposta.successo(vendedor.getMatricula()));
         }

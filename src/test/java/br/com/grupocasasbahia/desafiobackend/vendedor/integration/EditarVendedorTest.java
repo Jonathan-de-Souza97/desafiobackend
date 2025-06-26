@@ -56,9 +56,9 @@ public class EditarVendedorTest {
 
 
         //assert
-        //assertTrue(resultado.Sucedido());
+        assertTrue(resultado.Sucedido());
         assertEquals("Operação realizada", resultado.getMensagem());
-        assertEquals(vendedorCriado.getDados(), resultado.getDados());
+        assertTrue(resultado.getDados().contains("CLT"));
     }
 
     @Test
@@ -102,7 +102,7 @@ public class EditarVendedorTest {
         LocalDate dataNascimentoEditada = LocalDate.parse("2000-01-24");
         String documentoEditado = "436.881.850-48";
         String emailEditado = "johnEditado@gmail.com";
-        TipoDeContratacao tipoContratacaoEditado = TipoDeContratacao.CLT;
+        TipoDeContratacao tipoContratacaoEditado = TipoDeContratacao.Outsourcing;
         int numeroFilialEditada = 2;
 
         //act
@@ -113,7 +113,7 @@ public class EditarVendedorTest {
 
         //assert
         assertFalse(resultado.Sucedido());
-        assertEquals("Documento já cadastrado", resultado.getMensagem());
+        assertEquals("Documento já cadastrado para esse tipo de contratação", resultado.getMensagem());
         assertNull(resultado.getDados());
     }
 
@@ -136,6 +136,41 @@ public class EditarVendedorTest {
         //assert
         assertFalse(resultado.Sucedido());
         assertEquals("CPF inválido", resultado.getMensagem());
+        assertNull(resultado.getDados());
+    }
+
+    @Test
+    public void NaoDeveEditarVendedorDocumentoFilialNaoCadastrada(){
+        //arrange
+        String nome = "Jonathan de Souza";
+        LocalDate dataNascimento = LocalDate.parse("1997-01-24");
+        String documento = "552.013.890-74";
+        String email = "johnTest@gmail.com";
+        TipoDeContratacao tipoContratacao = TipoDeContratacao.CLT;
+        int numeroFilial = 1;
+
+        //act
+        InputCriarVendedor input = new InputCriarVendedor(nome, dataNascimento, documento, email,tipoContratacao, numeroFilial);
+        var vendedorCriado = _criarVendedorUseCase.executeAsync(input).join();
+
+
+        //arrange
+        String nomeEditado = "Joao de Souza";
+        LocalDate dataNascimentoEditada = LocalDate.parse("2000-01-24");
+        String documentoEditado = "707.377.550-59";
+        String emailEditado = "johnEditado@gmail.com";
+        TipoDeContratacao tipoContratacaoEditado = TipoDeContratacao.CLT;
+        int numeroFilialEditada = 4;
+
+        //act
+        InputEditarVendedor inputEditarVendedor = new InputEditarVendedor(vendedorCriado.getDados(),nomeEditado, dataNascimentoEditada, documentoEditado, emailEditado, tipoContratacaoEditado, numeroFilialEditada);
+        Resposta<String> resultado = _editarVendedorUseCase.executeAsync(inputEditarVendedor).join();
+
+
+
+        //assert
+        assertFalse(resultado.Sucedido());
+        assertEquals("Filial não cadastrada", resultado.getMensagem());
         assertNull(resultado.getDados());
     }
 }

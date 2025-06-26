@@ -18,7 +18,7 @@ public class ApagarVendedorUseCase implements IApagarVendedor {
 
     @Override
     public CompletableFuture<Resposta<String>> executeAsync(String matricula) {
-        Resposta<Vendedor> verificarSeVendedorExiste = _repository.buscarPorMatricula(matricula).join();
+        Resposta<String> verificarSeVendedorExiste = _repository.buscarPorMatricula(matricula).join();
 
         if(!verificarSeVendedorExiste.Sucedido())
             return CompletableFuture.completedFuture(Resposta.erro("Falha interna tente novamente"));
