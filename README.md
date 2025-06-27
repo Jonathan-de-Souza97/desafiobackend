@@ -76,6 +76,14 @@ psql -U postgres -h localhost -d app -f ./scriptSql/create.pgsql
 
 ```
 
+
+```bash
+Covarage: 
+```
+![image](https://github.com/user-attachments/assets/a24877fc-9f5d-4d45-a862-1f471d4ed41b)
+
+
+
 <p align="center">
   Desenvolvido por <strong>Jonathan de Souza</strong> 🚀  
   <br>
