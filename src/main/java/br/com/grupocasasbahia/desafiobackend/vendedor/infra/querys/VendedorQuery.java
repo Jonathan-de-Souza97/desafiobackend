@@ -6,12 +6,13 @@ import br.com.grupocasasbahia.desafiobackend.vendedor.application.response.Respo
 import br.com.grupocasasbahia.desafiobackend.vendedor.core.entities.Vendedor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.core.enums.TipoDeContratacao;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@Repository
+@Component
 
 public class VendedorQuery implements IVendedorQuery {
 

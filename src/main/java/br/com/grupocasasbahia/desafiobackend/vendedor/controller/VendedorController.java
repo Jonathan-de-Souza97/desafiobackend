@@ -95,7 +95,7 @@ public class VendedorController {
     }
 
     @GetMapping("/matricula/{matricula}")
-    public CompletableFuture<ResponseEntity<Resposta<OutputVendedor>>> buscarPorMatricula(@RequestParam String matricula){
+    public CompletableFuture<ResponseEntity<Resposta<OutputVendedor>>> buscarPorMatricula(@PathVariable String matricula){
         return _queryServices.buscarVendedorPorMatriculaAsync(matricula)
                 .thenApply(resposta -> {
                     if(!resposta.Sucedido() && resposta.getMensagem().equals("Falha interna tente novamente"))
@@ -106,11 +106,15 @@ public class VendedorController {
     }
 
     @GetMapping("/documento/{documento}")
-    public CompletableFuture<ResponseEntity<Resposta<List<OutputVendedor>>>> buscarPorDocumento(@RequestParam String documento){
+    public CompletableFuture<ResponseEntity<Resposta<List<OutputVendedor>>>> buscarPorDocumento(@PathVariable String documento){
         return _queryServices.buscarVendedorPorDocumentoAsync(documento)
                 .thenApply(resposta -> {
-                    if(!resposta.Sucedido() && resposta.getMensagem().equals("Falha interna tente novamente"))
+                    if(!resposta.Sucedido() && resposta.getMensagem().equals("Falha interna tente novamente")){
                         return ResponseEntity.status(500).body(resposta);
+                    }
+                    else if(resposta.Sucedido() && resposta.getDados() == null){
+                        return ResponseEntity.status(200).body(resposta);
+                    }
 
                     return ResponseEntity.status(200).body(resposta);
                 });

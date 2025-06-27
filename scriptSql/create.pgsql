@@ -54,3 +54,16 @@ insert into desafiobackendtest.controlesequenciamentomatricula
 	VALUES
 	(0);
 
+create table desafiobackend.statusprocessamento (
+	requisicaoid Text NOT NULL,
+	status Text NOT NULL,
+	mensagem Text NOT NULL,
+	primary key (requisicaoid)
+);
+
+create table desafiobackendtest.statusprocessamento (
+	requisicaoid Text NOT NULL,
+	status Text NOT NULL,
+	mensagem Text NOT NULL,
+	primary key (requisicaoid)
+);

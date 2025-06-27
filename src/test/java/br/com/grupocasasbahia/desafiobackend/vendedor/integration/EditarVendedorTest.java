@@ -4,6 +4,7 @@ import br.com.grupocasasbahia.desafiobackend.vendedor.application.inputs.InputCr
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.inputs.InputEditarVendedor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.ICriarVendedor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IEditarVendedor;
+import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IVendedorRepository;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.response.Resposta;
 import br.com.grupocasasbahia.desafiobackend.vendedor.core.entities.Vendedor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.core.enums.TipoDeContratacao;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,11 +26,12 @@ public class EditarVendedorTest {
     private IEditarVendedor _editarVendedorUseCase;
 
     @Autowired
-    private ICriarVendedor _criarVendedorUseCase;
+    private IVendedorRepository _vendedorRepository;
 
     @Test
     public void DeveEditarVendedor(){
         //arrange
+        int numeroMatricula = 15325646;
         String nome = "Jonathan de Souza";
         LocalDate dataNascimento = LocalDate.parse("1997-01-24");
         String documento = "59.931.636/0001-08";
@@ -37,8 +40,9 @@ public class EditarVendedorTest {
         int numeroFilial = 1;
 
         //act
-        InputCriarVendedor input = new InputCriarVendedor(nome, dataNascimento, documento, email,tipoContratacao, numeroFilial);
-        var vendedorCriado = _criarVendedorUseCase.executeAsync(input).join();
+        Vendedor input = new Vendedor(nome, dataNascimento, documento, email,tipoContratacao, numeroFilial);
+        input.setMatricula(numeroMatricula,tipoContratacao);
+        var vendedorCriado = _vendedorRepository.salvar(input).join();
 
 
         //arrange
@@ -86,6 +90,8 @@ public class EditarVendedorTest {
     @Test
     public void NaoDeveEditarVendedorDocumentoJaCadastrado(){
         //arrange
+
+        int numeroMatricula = 15326646;
         String nome = "Jonathan de Souza";
         LocalDate dataNascimento = LocalDate.parse("1997-01-24");
         String documento = "436.881.850-48";
@@ -94,8 +100,11 @@ public class EditarVendedorTest {
         int numeroFilial = 1;
 
         //act
-        InputCriarVendedor input = new InputCriarVendedor(nome, dataNascimento, documento, email,tipoContratacao, numeroFilial);
-        var vendedorCriado = _criarVendedorUseCase.executeAsync(input).join();
+        Vendedor input = new Vendedor(nome, dataNascimento, documento, email,tipoContratacao, numeroFilial);
+
+        input.setMatricula(numeroMatricula, tipoContratacao);
+
+        var vendedorCriado = _vendedorRepository.salvar(input).join();
 
         //arrange
         String nomeEditado = "Joao de Souza";
@@ -142,6 +151,7 @@ public class EditarVendedorTest {
     @Test
     public void NaoDeveEditarVendedorDocumentoFilialNaoCadastrada(){
         //arrange
+        int numeroMatricula = 15325646;
         String nome = "Jonathan de Souza";
         LocalDate dataNascimento = LocalDate.parse("1997-01-24");
         String documento = "552.013.890-74";
@@ -150,8 +160,9 @@ public class EditarVendedorTest {
         int numeroFilial = 1;
 
         //act
-        InputCriarVendedor input = new InputCriarVendedor(nome, dataNascimento, documento, email,tipoContratacao, numeroFilial);
-        var vendedorCriado = _criarVendedorUseCase.executeAsync(input).join();
+        Vendedor input = new Vendedor(nome, dataNascimento, documento, email,tipoContratacao, numeroFilial);
+        input.setMatricula(numeroMatricula,tipoContratacao);
+        var vendedorCriado = _vendedorRepository.salvar(input).join();
 
 
         //arrange

@@ -3,7 +3,9 @@ package br.com.grupocasasbahia.desafiobackend.vendedor.integration;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.inputs.InputCriarVendedor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IApagarVendedor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.ICriarVendedor;
+import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IVendedorRepository;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.response.Resposta;
+import br.com.grupocasasbahia.desafiobackend.vendedor.core.entities.Vendedor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.core.enums.TipoDeContratacao;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +23,13 @@ public class ApagarVendedorTest {
     @Autowired
     private IApagarVendedor _apagarVendedorUseCase;
     @Autowired
-    private ICriarVendedor _criarVendedorUseCase;
+    private IVendedorRepository _repository;
 
     @Test
     public void DeveApagarUmVendedor(){
 
         //arrange
-        String matricula = "00000001-CLT";
+        int numeroMatricula = 2659;
         String nome = "Jonathan de Souza";
         LocalDate dataNascimento = LocalDate.parse("1997-01-24");
         String documento = "85.684.876/0001-57";
@@ -36,8 +38,9 @@ public class ApagarVendedorTest {
         int numeroFilial = 1;
 
         //act
-        InputCriarVendedor input = new InputCriarVendedor(nome, dataNascimento, documento, email,tipoContratacao, numeroFilial);
-        Resposta<String> vendedor = _criarVendedorUseCase.executeAsync(input).join();
+        Vendedor input = new Vendedor(nome, dataNascimento, documento, email,tipoContratacao, numeroFilial);
+        input.setMatricula(numeroMatricula, tipoContratacao);
+        Resposta<String> vendedor = _repository.salvar(input).join();
         Resposta<String> resultado = _apagarVendedorUseCase.executeAsync(vendedor.getDados()).join();
 
         //Assert

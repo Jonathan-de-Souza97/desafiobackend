@@ -15,6 +15,10 @@ public class Resposta<T> {
         return new Resposta<>(true, "Operação realizada", data);
     }
 
+    public static <T> Resposta<T> successo(String mensagem, T data) {
+        return new Resposta<>(true, mensagem, data);
+    }
+
     public static <T> Resposta<T> erro(String message) {
         return new Resposta<>(false, message, null);
     }

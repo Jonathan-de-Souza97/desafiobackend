@@ -98,10 +98,10 @@ public class VendedorQueryServices implements IVendedorQueryServices {
         List<OutputVendedor> outputVendedores = new ArrayList<>();
 
         if(!vendedores.Sucedido())
-            CompletableFuture.completedFuture(Resposta.erro("Falha interna tente novamente"));
+            return CompletableFuture.completedFuture(Resposta.erro("Falha interna tente novamente"));
 
         if(vendedores.getDados().isEmpty())
-            CompletableFuture.completedFuture(Resposta.successo(null));
+            return CompletableFuture.completedFuture(Resposta.successo(null));
 
         for(Vendedor vendedor : vendedores.getDados()){
             Resposta<Filial> buscarFilial = _filialApi.buscarPorID(vendedor.getnumeroFilial()).join();

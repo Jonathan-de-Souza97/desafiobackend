@@ -99,40 +99,6 @@ public class ControllerVendedorTest {
     }
 
     @Test
-    public void NaoDeveRetornar500QuandoCriarVendedorFalhaInterna(){
-        //arrange
-        Resposta<String> resposta = Resposta.erro("Falha interna tente novamente");
-        Mockito.when(_criarVendedorUseCase.executeAsync(any()))
-                .thenReturn(CompletableFuture.completedFuture(resposta));
-
-        //act
-        ResponseEntity<Resposta<String>> acao = _controller.criar(any()).join();
-
-        //assert
-        assertEquals(500, acao.getStatusCode().value());
-        assertFalse(acao.getBody().Sucedido());
-        assertEquals("Falha interna tente novamente",acao.getBody().getMensagem());
-        assertEquals(null, acao.getBody().getDados());
-    }
-
-    @Test
-    public void DeveRetornar400QuandoCriarVendedorEmailInvalido(){
-        //arrange
-        Resposta<String> resposta = Resposta.erro("Email inválido");
-        Mockito.when(_criarVendedorUseCase.executeAsync(any()))
-                .thenReturn(CompletableFuture.completedFuture(resposta));
-
-        //act
-        ResponseEntity<Resposta<String>> acao = _controller.criar(any()).join();
-
-        //assert
-        assertEquals(400, acao.getStatusCode().value());
-        assertFalse(acao.getBody().Sucedido());
-        assertEquals("Email inválido",acao.getBody().getMensagem());
-        assertEquals(null, acao.getBody().getDados());
-    }
-
-    @Test
     public void DeveRetornar200QuandoEditarVendedor(){
         //arrange
         Resposta<String> resposta = Resposta.successo("00000001-PJ");

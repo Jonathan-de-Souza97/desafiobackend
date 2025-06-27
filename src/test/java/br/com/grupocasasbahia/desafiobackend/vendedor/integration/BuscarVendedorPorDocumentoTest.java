@@ -3,8 +3,10 @@ package br.com.grupocasasbahia.desafiobackend.vendedor.integration;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.inputs.InputCriarVendedor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.ICriarVendedor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IVendedorQueryServices;
+import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IVendedorRepository;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.outputs.OutputVendedor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.response.Resposta;
+import br.com.grupocasasbahia.desafiobackend.vendedor.core.entities.Vendedor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.core.enums.TipoDeContratacao;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,27 +26,30 @@ public class BuscarVendedorPorDocumentoTest {
     @Autowired
     private IVendedorQueryServices _queryServices;
     @Autowired
-    private ICriarVendedor _criarVendedorUseCase;
+    private IVendedorRepository _repository;
     @Test
     public void DeveRetornarVendedorDeAcordoComODocumento(){
         //Arrange
-        InputCriarVendedor input1 = new InputCriarVendedor("Jonathan de Souza", LocalDate.parse("1964-01-24"), "658.108.500-65", "john1@gmail.com",TipoDeContratacao.CLT, 1);
+        Vendedor input1 = new Vendedor("Jonathan de Souza", LocalDate.parse("1964-01-24"), "658.108.500-65", "john1@gmail.com",TipoDeContratacao.CLT, 1);
+        int numeroMatricula = 3425443;
+
+        input1.setMatricula(numeroMatricula, input1.getTipoDeContratacao());
 
         //Act
-        _criarVendedorUseCase.executeAsync(input1).join();
+        _repository.salvar(input1).join();
 
 
-        Resposta<List<OutputVendedor>> vendedor = _queryServices.buscarVendedorPorDocumentoAsync(input1.documento()).join();
+        Resposta<List<OutputVendedor>> vendedor = _queryServices.buscarVendedorPorDocumentoAsync(input1.getDocumento()).join();
 
         //Assert
         assertTrue(vendedor.Sucedido());
         assertEquals("Operação realizada", vendedor.getMensagem());
         assertNotNull(vendedor.getDados().size() == 1);
-        assertEquals(input1.nome(), vendedor.getDados().get(0).nome());
-        assertEquals(input1.email(), vendedor.getDados().get(0).email());
+        assertEquals(input1.getNome(), vendedor.getDados().get(0).nome());
+        assertEquals(input1.getEmail(), vendedor.getDados().get(0).email());
         assertEquals("65810850065", vendedor.getDados().get(0).documento());
-        assertEquals(input1.dataDeNascimento(), vendedor.getDados().get(0).dataDeNascimento());
-        assertEquals(input1.numeroFilial(), vendedor.getDados().get(0).filial().getId());
+        assertEquals(input1.getDataDeNascimento(), vendedor.getDados().get(0).dataDeNascimento());
+        assertEquals(input1.getnumeroFilial(), vendedor.getDados().get(0).filial().getId());
         assertEquals("Berrini", vendedor.getDados().get(0).filial().getNome());
         assertEquals("66.235.624/0001-04", vendedor.getDados().get(0).filial().getCnpj());
         assertEquals("São Paulo", vendedor.getDados().get(0).filial().getCidade());
