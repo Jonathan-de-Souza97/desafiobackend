@@ -1,0 +1,186 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > KafkaVendedorConsumidor</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">br.com.grupocasasbahia.desafiobackend.vendedor.infra.drivers</a>
+</div>
+
+<h1>Coverage Summary for Class: KafkaVendedorConsumidor (br.com.grupocasasbahia.desafiobackend.vendedor.infra.drivers)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">KafkaVendedorConsumidor</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (7/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    72%
+  </span>
+  <span class="absValue">
+    (18/25)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package br.com.grupocasasbahia.desafiobackend.vendedor.infra.drivers;
+&nbsp;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.inputs.InputCriarVendedor;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IFilialApi;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IProcessarRepository;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IVendedorConsumidor;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IVendedorRepository;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.response.Resposta;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.core.entities.Filial;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.core.entities.Vendedor;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.core.enums.StatusProcessamento;
+&nbsp;import org.apache.kafka.common.protocol.types.Field;
+&nbsp;import org.springframework.kafka.annotation.KafkaListener;
+&nbsp;import org.springframework.messaging.handler.annotation.Header;
+&nbsp;import org.springframework.messaging.handler.annotation.Payload;
+&nbsp;import org.springframework.stereotype.Component;
+&nbsp;import org.springframework.kafka.support.KafkaHeaders;
+&nbsp;
+&nbsp;@Component
+&nbsp;public class KafkaVendedorConsumidor implements IVendedorConsumidor {
+&nbsp;
+&nbsp;    private final IVendedorRepository _repositoryVendedor;
+&nbsp;    private final IFilialApi _filialApi;
+&nbsp;    private final IProcessarRepository _repositoryProcessamento;
+&nbsp;
+<b class="fc">&nbsp;    public KafkaVendedorConsumidor(IVendedorRepository repository, IFilialApi filialApi, IProcessarRepository repositoryProcessamento) {</b>
+<b class="fc">&nbsp;        _repositoryVendedor = repository;</b>
+<b class="fc">&nbsp;        _filialApi = filialApi;</b>
+<b class="fc">&nbsp;        _repositoryProcessamento = repositoryProcessamento;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @KafkaListener(topics = &quot;criar-vendedor&quot;,groupId = &quot;grupo-vendedor&quot;)
+&nbsp;    @Override
+&nbsp;    public Resposta&lt;String&gt; processar(@Header(&quot;kafka_receivedMessageKey&quot;) String requisicaoID, @Payload InputCriarVendedor input) {
+&nbsp;
+<b class="fc">&nbsp;        Vendedor vendedor = input.toEntity();</b>
+<b class="pc">&nbsp;        if(!vendedor.valido())</b>
+<b class="nc">&nbsp;            return _repositoryProcessamento.salvarStatus(requisicaoID, StatusProcessamento.Erro, vendedor.getError()).join();</b>
+&nbsp;
+<b class="fc">&nbsp;        Resposta&lt;Integer&gt; buscaNovaMatricula = _repositoryVendedor.buscarNovaMatricula().join();</b>
+&nbsp;
+<b class="pc">&nbsp;        if(!buscaNovaMatricula.Sucedido())</b>
+<b class="nc">&nbsp;            return Resposta.erro(&quot;Falha interna, tente novamente&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        vendedor.setMatricula(buscaNovaMatricula.getDados(), vendedor.getTipoDeContratacao());</b>
+&nbsp;
+<b class="fc">&nbsp;        Resposta&lt;String&gt; verificarSeDocumentoJaExiste = _repositoryVendedor.buscarPorDocumentoETipoDeContratacao(vendedor.getDocumento(), vendedor.getTipoDeContratacao()).join();</b>
+&nbsp;
+<b class="pc">&nbsp;        if(!verificarSeDocumentoJaExiste.Sucedido())</b>
+<b class="nc">&nbsp;            return Resposta.erro(&quot;Falha interna, tente novamente&quot;);</b>
+&nbsp;
+<b class="pc">&nbsp;        if(verificarSeDocumentoJaExiste.getDados() != null)</b>
+<b class="nc">&nbsp;            return Resposta.erro(&quot;Documento já cadastrado para esse tipo de contratação&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        Resposta&lt;Filial&gt; buscarFilial = _filialApi.buscarPorID(vendedor.getnumeroFilial()).join();</b>
+&nbsp;
+<b class="pc">&nbsp;        if(!buscarFilial.Sucedido())</b>
+<b class="nc">&nbsp;            return Resposta.erro(&quot;Falha interna, tente novamente&quot;);</b>
+&nbsp;
+<b class="pc">&nbsp;        if(buscarFilial.getDados() == null)</b>
+<b class="nc">&nbsp;            return Resposta.erro(&quot;Filial não cadastrada&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        Resposta&lt;String&gt; salvarVendedor = _repositoryVendedor.salvar(vendedor).join();</b>
+&nbsp;
+<b class="pc">&nbsp;        if(!salvarVendedor.Sucedido())</b>
+<b class="nc">&nbsp;            return Resposta.erro(&quot;Falha interna, tente novamente&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;       return  _repositoryProcessamento.salvarStatus(requisicaoID,StatusProcessamento.Sucesso,&quot;Matricula: &quot; + salvarVendedor.getDados()).join();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:31</div>
+</div>
+</body>
+</html>

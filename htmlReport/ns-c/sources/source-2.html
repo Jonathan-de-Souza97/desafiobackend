@@ -1,0 +1,221 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > VendedorQuery</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">br.com.grupocasasbahia.desafiobackend.vendedor.infra.querys</a>
+</div>
+
+<h1>Coverage Summary for Class: VendedorQuery (br.com.grupocasasbahia.desafiobackend.vendedor.infra.querys)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">VendedorQuery</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (5/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88,1%
+  </span>
+  <span class="absValue">
+    (37/42)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package br.com.grupocasasbahia.desafiobackend.vendedor.infra.querys;
+&nbsp;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IVendedorQuery;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.outputs.OutputVendedor;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.response.Resposta;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.core.entities.Vendedor;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.core.enums.TipoDeContratacao;
+&nbsp;import org.springframework.jdbc.core.JdbcTemplate;
+&nbsp;import org.springframework.stereotype.Component;
+&nbsp;import org.springframework.stereotype.Repository;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.concurrent.CompletableFuture;
+&nbsp;
+&nbsp;@Component
+&nbsp;
+&nbsp;public class VendedorQuery implements IVendedorQuery {
+&nbsp;
+&nbsp;private JdbcTemplate _conexao;
+&nbsp;
+<b class="fc">&nbsp;    public VendedorQuery(JdbcTemplate conexao) {</b>
+<b class="fc">&nbsp;        this._conexao = conexao;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public CompletableFuture&lt;Resposta&lt;Vendedor&gt;&gt; buscarPorMatricula(String matricula) {
+<b class="fc">&nbsp;        String query = &quot;SELECT matricula, nome, datadenascimento, documento, tipodecontratacao, email, numeroFilial FROM vendedor WHERE matricula = ?&quot;;</b>
+&nbsp;
+&nbsp;        try {
+<b class="fc">&nbsp;            List&lt;Vendedor&gt; vendedor = _conexao.query(</b>
+&nbsp;                    query,
+&nbsp;                    new Object[]{matricula},
+<b class="fc">&nbsp;                    (rs, rowNum) -&gt; new Vendedor(</b>
+<b class="fc">&nbsp;                            rs.getString(&quot;matricula&quot;),</b>
+<b class="fc">&nbsp;                            rs.getString(&quot;nome&quot;),</b>
+<b class="pc">&nbsp;                            rs.getDate(&quot;datadenascimento&quot;) != null ? rs.getDate(&quot;datadenascimento&quot;).toLocalDate() : null,</b>
+<b class="fc">&nbsp;                            rs.getString(&quot;documento&quot;),</b>
+<b class="fc">&nbsp;                            rs.getString(&quot;email&quot;),</b>
+<b class="fc">&nbsp;                            TipoDeContratacao.valueOf(rs.getString(&quot;tipodecontratacao&quot;)),</b>
+<b class="fc">&nbsp;                            rs.getInt(&quot;numerofilial&quot;)</b>
+&nbsp;            ));
+&nbsp;
+<b class="pc">&nbsp;            if(vendedor.isEmpty())</b>
+<b class="nc">&nbsp;                return CompletableFuture.completedFuture(Resposta.successo(null));</b>
+&nbsp;
+<b class="fc">&nbsp;            return CompletableFuture.completedFuture(Resposta.successo(vendedor.get(0)));</b>
+&nbsp;
+&nbsp;        } catch (Exception e) {
+<b class="nc">&nbsp;            return CompletableFuture.completedFuture(Resposta.erro(&quot;Erro ao buscar vendedor: &quot; + e.getMessage()));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public CompletableFuture&lt;Resposta&lt;List&lt;Vendedor&gt;&gt;&gt; buscarPorDocumento(String documento) {
+<b class="fc">&nbsp;        String query = &quot;SELECT matricula, nome, datadenascimento, documento, tipodecontratacao, email, numeroFilial FROM vendedor WHERE documento = ?&quot;;</b>
+&nbsp;
+&nbsp;        try {
+<b class="fc">&nbsp;            List&lt;Vendedor&gt; vendedores = _conexao.query(</b>
+&nbsp;                    query,
+&nbsp;                    new Object[]{documento},
+<b class="fc">&nbsp;                    (rs, rowNum) -&gt; new Vendedor(</b>
+<b class="fc">&nbsp;                            rs.getString(&quot;matricula&quot;),</b>
+<b class="fc">&nbsp;                            rs.getString(&quot;nome&quot;),</b>
+<b class="pc">&nbsp;                            rs.getDate(&quot;datadenascimento&quot;) != null ? rs.getDate(&quot;datadenascimento&quot;).toLocalDate() : null,</b>
+<b class="fc">&nbsp;                            rs.getString(&quot;documento&quot;),</b>
+<b class="fc">&nbsp;                            rs.getString(&quot;email&quot;),</b>
+<b class="fc">&nbsp;                            TipoDeContratacao.valueOf(rs.getString(&quot;tipodecontratacao&quot;)),</b>
+<b class="fc">&nbsp;                            rs.getInt(&quot;numerofilial&quot;)</b>
+&nbsp;                    ));
+&nbsp;
+<b class="pc">&nbsp;            if(vendedores.isEmpty())</b>
+<b class="nc">&nbsp;                return CompletableFuture.completedFuture(Resposta.successo(null));</b>
+&nbsp;
+<b class="fc">&nbsp;            return CompletableFuture.completedFuture(Resposta.successo(vendedores));</b>
+&nbsp;
+&nbsp;        } catch (Exception e) {
+<b class="nc">&nbsp;            return CompletableFuture.completedFuture(Resposta.erro(&quot;Erro ao buscar vendedor: &quot; + e.getMessage()));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public CompletableFuture&lt;Resposta&lt;List&lt;Vendedor&gt;&gt;&gt; buscarTodos() {
+<b class="fc">&nbsp;        String query = &quot;SELECT matricula, nome, datadenascimento, documento, tipodecontratacao, email, numeroFilial FROM vendedor&quot;;</b>
+&nbsp;
+&nbsp;        try {
+&nbsp;
+<b class="fc">&nbsp;            List&lt;Vendedor&gt; vendedores = _conexao.query(query, new Object[]{}, (rs, rowNum) -&gt;</b>
+<b class="fc">&nbsp;                    new Vendedor(</b>
+<b class="fc">&nbsp;                            rs.getString(&quot;matricula&quot;),</b>
+<b class="fc">&nbsp;                            rs.getString(&quot;nome&quot;),</b>
+<b class="pc">&nbsp;                            rs.getDate(&quot;datadenascimento&quot;) != null ? rs.getDate(&quot;datadenascimento&quot;).toLocalDate() : null,</b>
+<b class="fc">&nbsp;                            rs.getString(&quot;documento&quot;),</b>
+<b class="fc">&nbsp;                            rs.getString(&quot;email&quot;),</b>
+<b class="fc">&nbsp;                            TipoDeContratacao.valueOf(rs.getString(&quot;tipodecontratacao&quot;)),</b>
+<b class="fc">&nbsp;                            rs.getInt(&quot;numeroFilial&quot;)</b>
+&nbsp;                    ));
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;            return CompletableFuture.completedFuture(Resposta.successo(vendedores));</b>
+&nbsp;        }
+&nbsp;        catch (Exception ex){
+<b class="nc">&nbsp;            return CompletableFuture.completedFuture(Resposta.erro(&quot;Falha ao buscar vendedores: &quot; + ex.getMessage()));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:31</div>
+</div>
+</body>
+</html>

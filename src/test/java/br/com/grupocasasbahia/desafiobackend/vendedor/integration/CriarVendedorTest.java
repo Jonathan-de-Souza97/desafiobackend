@@ -2,13 +2,11 @@ package br.com.grupocasasbahia.desafiobackend.vendedor.integration;
 
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.inputs.InputCriarVendedor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.ICriarVendedor;
-import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IProdutor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.configuration.MockProdutor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.core.enums.TipoDeContratacao;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
