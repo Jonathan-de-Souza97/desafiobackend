@@ -9,12 +9,10 @@ import br.com.grupocasasbahia.desafiobackend.vendedor.application.response.Respo
 import br.com.grupocasasbahia.desafiobackend.vendedor.core.entities.Filial;
 import br.com.grupocasasbahia.desafiobackend.vendedor.core.entities.Vendedor;
 import br.com.grupocasasbahia.desafiobackend.vendedor.core.enums.StatusProcessamento;
-import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
-import org.springframework.kafka.support.KafkaHeaders;
 
 import java.util.concurrent.CompletableFuture;
 

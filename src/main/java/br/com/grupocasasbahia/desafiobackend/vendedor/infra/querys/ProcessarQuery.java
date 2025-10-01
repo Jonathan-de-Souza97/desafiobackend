@@ -33,7 +33,7 @@ public class ProcessarQuery implements IProcessarQuery {
                     )
             );
 
-            if(output.isEmpty())
+            if(output.size() == 0)
                 return CompletableFuture.completedFuture(Resposta.successo(null));
 
 
