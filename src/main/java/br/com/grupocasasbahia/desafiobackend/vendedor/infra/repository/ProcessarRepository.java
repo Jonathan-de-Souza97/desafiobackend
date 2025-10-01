@@ -31,7 +31,5 @@ public class ProcessarRepository implements IProcessarRepository {
         catch (Exception ex){
             return CompletableFuture.completedFuture(Resposta.erro("Erro ao salvar processamento: " + ex.getMessage()));
         }
-
-
     }
 }

@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-  <title>Coverage Report > IApagarVendedor</title>
+  <title>Coverage Report > Vendedor</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,19 +19,101 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces</a>
+    <a href="../index.html">br.com.grupocasasbahia.desafiobackend.vendedor.core.entities</a>
 </div>
 
-<h1>Coverage Summary for Class: IApagarVendedor (br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces)</h1>
+<h1>Coverage Summary for Class: Vendedor (br.com.grupocasasbahia.desafiobackend.vendedor.core.entities)</h1>
 
 <table class="coverageStats">
+
 <tr>
   <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
 </tr>
 <tr>
-  <td class="name">IApagarVendedor</td>
+  <td class="name">Vendedor</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (26/26)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90,4%
+  </span>
+  <span class="absValue">
+    (66/73)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    98,4%
+  </span>
+  <span class="absValue">
+    (121/123)
+  </span>
+</td>
 </tr>
-
+  <tr>
+    <td class="name">Vendedor$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (27/27)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90,4%
+  </span>
+  <span class="absValue">
+    (66/73)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    98,4%
+  </span>
+  <span class="absValue">
+    (122/124)
+  </span>
+</td>
+</tr>
 </table>
 
 <br/>
@@ -39,14 +121,282 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces;
+<code class="sourceCode" id="sourceCode">&nbsp;package br.com.grupocasasbahia.desafiobackend.vendedor.core.entities;
 &nbsp;
-&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.response.Resposta;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.core.enums.TipoDeContratacao;
 &nbsp;
-&nbsp;import java.util.concurrent.CompletableFuture;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.time.Period;
+&nbsp;import java.util.UUID;
+&nbsp;import java.util.regex.Pattern;
 &nbsp;
-&nbsp;public interface IApagarVendedor {
-&nbsp;    CompletableFuture&lt;Resposta&lt;String&gt;&gt;executeAsync(String matricula);
+&nbsp;public class Vendedor {
+&nbsp;    private String error;
+&nbsp;    private UUID id;
+&nbsp;    private String matricula;
+&nbsp;    private String nome;
+&nbsp;    private LocalDate dataDeNascimento;
+&nbsp;    private String documento;
+&nbsp;    private String email;
+&nbsp;    private TipoDeContratacao tipoDeContratacao;
+&nbsp;    private Integer numeroFilial;
+&nbsp;
+<b class="fc">&nbsp;    public Vendedor(String nome, LocalDate dataDeNascimento, String documento, String email, TipoDeContratacao tipoDeContratacao, Integer numeroFilial) {</b>
+<b class="fc">&nbsp;        this.id = UUID.randomUUID();</b>
+<b class="fc">&nbsp;        this.nome = nome;</b>
+<b class="fc">&nbsp;        this.dataDeNascimento = dataDeNascimento;</b>
+<b class="fc">&nbsp;        this.documento = limparDocumento(documento);</b>
+<b class="fc">&nbsp;        this.email = email;</b>
+<b class="fc">&nbsp;        this.tipoDeContratacao = tipoDeContratacao;</b>
+<b class="fc">&nbsp;        this.numeroFilial = numeroFilial;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public Vendedor(String matricula, String nome, LocalDate dataDeNascimento, String documento, String email, TipoDeContratacao tipoDeContratacao, Integer numeroFilial) {</b>
+<b class="fc">&nbsp;        this.matricula = matricula;</b>
+<b class="fc">&nbsp;        this.nome = nome;</b>
+<b class="fc">&nbsp;        this.dataDeNascimento = dataDeNascimento;</b>
+<b class="fc">&nbsp;        this.documento = limparDocumento(documento);</b>
+<b class="fc">&nbsp;        this.email = email;</b>
+<b class="fc">&nbsp;        this.tipoDeContratacao = tipoDeContratacao;</b>
+<b class="fc">&nbsp;        this.numeroFilial = numeroFilial;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Boolean valido(){
+<b class="fc">&nbsp;        if(!validarNome()){</b>
+<b class="fc">&nbsp;            error = &quot;Nome inválido&quot;;</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if(!validarEmail()){</b>
+<b class="fc">&nbsp;            error = &quot;Email inválido&quot;;</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if(!validarDataNascimento()){</b>
+<b class="fc">&nbsp;            error = &quot;Idade inválida, vendedor precisa ter 16 anos completos&quot;;</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if(!validarDocumentoEmBrancoOuVazio()){</b>
+<b class="fc">&nbsp;            error = &quot;Documento é obrigatório&quot;;</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if(!validarDocumentoTodosDigitosIguais(limparDocumento(documento))){</b>
+<b class="fc">&nbsp;            error = &quot;Documento inválido, todos dígitos são iguais&quot;;</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if(tipoDeContratacao != TipoDeContratacao.PJ &amp;&amp; !validarCpf()){</b>
+<b class="fc">&nbsp;            error = &quot;CPF inválido&quot;;</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if(tipoDeContratacao == TipoDeContratacao.PJ &amp;&amp; !validarCnpj()){</b>
+<b class="fc">&nbsp;            error = &quot;CNPJ inválido&quot;;</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if(!validarnumeroFilial()){</b>
+<b class="fc">&nbsp;            error = &quot;Id filial deve ser maior que 0&quot;;</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Boolean validarNome(){
+<b class="pc">&nbsp;        if(nome == null || nome.trim().isEmpty())</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;
+<b class="fc">&nbsp;        return Pattern.matches(&quot;^([A-Za-zÀ-ÿ]+\\s)+[A-Za-zÀ-ÿ]+$&quot;, nome);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Boolean validarDataNascimento(){
+&nbsp;
+<b class="pc">&nbsp;        if(dataDeNascimento == null)</b>
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;
+<b class="fc">&nbsp;        LocalDate dataFim = LocalDate.now();</b>
+<b class="fc">&nbsp;        Integer idade = Period.between(dataDeNascimento, dataFim).getYears();</b>
+&nbsp;
+<b class="fc">&nbsp;        if(idade &lt; 16)</b>
+<b class="fc">&nbsp;            return  false;</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Boolean validarDocumentoEmBrancoOuVazio(){
+<b class="fc">&nbsp;        Integer TamanhoValido = 11;</b>
+&nbsp;
+<b class="pc">&nbsp;        if(documento == null || documento.trim().isEmpty())</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Boolean validarDocumentoTodosDigitosIguais(String documento){
+<b class="fc">&nbsp;        Character primeiroDigito = documento.charAt(0);</b>
+<b class="fc">&nbsp;        Boolean todosOsDigitosSaoIguais = true;</b>
+&nbsp;
+<b class="fc">&nbsp;        for(Character digito : documento.toCharArray()){</b>
+<b class="fc">&nbsp;            if(digito != primeiroDigito)</b>
+<b class="fc">&nbsp;                todosOsDigitosSaoIguais = false;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if(todosOsDigitosSaoIguais)</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private String limparDocumento(String documento){
+<b class="fc">&nbsp;        return documento.replaceAll(&quot;\\D&quot;, &quot;&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Boolean validarCpf(){
+&nbsp;
+<b class="fc">&nbsp;        Integer tamanhoCpfValido = 11;</b>
+<b class="fc">&nbsp;        String cpf = limparDocumento(documento);</b>
+<b class="fc">&nbsp;        Integer tamanhoCpf = cpf.length();</b>
+&nbsp;
+<b class="pc">&nbsp;        if(tipoDeContratacao != TipoDeContratacao.PJ &amp;&amp; tamanhoCpf != tamanhoCpfValido)</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;
+<b class="fc">&nbsp;        return aplicarRegrasDeDigitosCPF(cpf);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Boolean aplicarRegrasDeDigitosCPF(String cpf){
+&nbsp;        // Referencia https://www.macoratti.net/alg_cpf.htm#:~:text=O%20algoritmo%20de%20valida%C3%A7%C3%A3o%20do,%3A%20111.444.777%2D05.
+&nbsp;
+<b class="fc">&nbsp;        Integer primeiroDigito = calcularDigitoCPF(cpf,10);</b>
+<b class="fc">&nbsp;        Integer segundoDigito = calcularDigitoCPF(cpf,11);</b>
+<b class="fc">&nbsp;        String digitosCalculados = primeiroDigito.toString() + segundoDigito.toString();</b>
+<b class="fc">&nbsp;        String digitosOriginais = cpf.substring(cpf.length() -2);</b>
+&nbsp;
+<b class="fc">&nbsp;        if(!digitosCalculados.equals(digitosOriginais))</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Integer calcularDigitoCPF(String cpf, Integer fator){
+<b class="fc">&nbsp;        Integer total = 0;</b>
+&nbsp;
+<b class="fc">&nbsp;        for (Character digito : cpf.toCharArray()){</b>
+<b class="fc">&nbsp;            if (fator &gt; 1)</b>
+<b class="fc">&nbsp;                total += Integer.parseInt(digito.toString()) * fator --;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        Integer resto = total % 11;</b>
+&nbsp;
+<b class="fc">&nbsp;        return resto &lt; 2 ? 0 : 11 - resto;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Boolean validarCnpj(){
+&nbsp;
+<b class="fc">&nbsp;        Integer tamanhoCnpjValido = 14;</b>
+<b class="fc">&nbsp;        String cnpj = limparDocumento(documento);</b>
+<b class="fc">&nbsp;        Integer tamanhoCnpj = cnpj.length();</b>
+&nbsp;
+<b class="pc">&nbsp;        if(tipoDeContratacao == TipoDeContratacao.PJ &amp;&amp; tamanhoCnpj != tamanhoCnpjValido)</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;
+<b class="fc">&nbsp;        return aplicarRegrasDeDigitosCnpj(cnpj);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Boolean aplicarRegrasDeDigitosCnpj(String cnpj){
+&nbsp;        // https://www.macoratti.net/alg_cnpj.htm#:~:text=O%20n%C3%BAmero%20que%20comp%C3%B5e%20o,que%20s%C3%A3o%20os%20d%C3%ADgitos%20verificadores.
+&nbsp;
+<b class="fc">&nbsp;        Integer primeiroDigito = calcularDigitoCNPJ(cnpj,12);</b>
+<b class="fc">&nbsp;        Integer segundoDigito = calcularDigitoCNPJ(cnpj,13);</b>
+<b class="fc">&nbsp;        String digitosCalculados  = primeiroDigito.toString() + segundoDigito.toString();</b>
+<b class="fc">&nbsp;        String digitosOriginais  = cnpj.substring(cnpj.length() -2);</b>
+&nbsp;
+<b class="fc">&nbsp;        if(!digitosCalculados.equals(digitosOriginais))</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Integer calcularDigitoCNPJ(String cnpj, Integer posicao){
+&nbsp;        int[] pesos;
+&nbsp;
+<b class="fc">&nbsp;        if(posicao == 12){</b>
+<b class="fc">&nbsp;            pesos = new int[]{5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};</b>
+&nbsp;        }
+<b class="pc">&nbsp;        else if (posicao == 13){</b>
+<b class="fc">&nbsp;            pesos = new int[]{6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};</b>
+&nbsp;        }
+&nbsp;        else{
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;Posição inválida para cálculo do dígito do CNPJ&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        int total = 0;</b>
+<b class="fc">&nbsp;        for (int index = 0; index &lt; pesos.length; index ++){</b>
+<b class="fc">&nbsp;            total += Character.getNumericValue(cnpj.charAt(index)) * pesos[index];</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        int resto = total % 11;</b>
+&nbsp;
+<b class="fc">&nbsp;        return resto &lt; 2 ? 0 : 11 - resto;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Boolean validarEmail(){
+<b class="pc">&nbsp;        if(email == null || email.trim().isEmpty())</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;
+<b class="fc">&nbsp;        return Pattern.matches(&quot;^(.+)\\@(.+)$&quot;, email);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Boolean validarnumeroFilial(){
+&nbsp;
+<b class="fc">&nbsp;        return numeroFilial &gt; 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public UUID getId() {
+<b class="fc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getMatricula() {
+<b class="fc">&nbsp;        return matricula;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getNome() {
+<b class="fc">&nbsp;        return nome;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public LocalDate getDataDeNascimento() {
+<b class="fc">&nbsp;        return dataDeNascimento;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getDocumento() {
+<b class="fc">&nbsp;        return documento;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getEmail() {
+<b class="fc">&nbsp;        return email;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public TipoDeContratacao getTipoDeContratacao() {
+<b class="fc">&nbsp;        return tipoDeContratacao;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Integer getnumeroFilial() {
+<b class="fc">&nbsp;        return numeroFilial;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getError() {
+<b class="fc">&nbsp;        return error;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setMatricula(int numeroMatricula, TipoDeContratacao tipoDeContratacao) {
+<b class="fc">&nbsp;        this.matricula = String.format(&quot;%08d-%s&quot;, numeroMatricula,</b>
+<b class="pc">&nbsp;                switch (tipoDeContratacao){case PJ -&gt; &quot;PJ&quot;;</b>
+<b class="fc">&nbsp;                                           case CLT -&gt; &quot;CLT&quot;;</b>
+<b class="fc">&nbsp;                                           case Outsourcing -&gt; &quot;OUT&quot;;</b>
+&nbsp;        });
+&nbsp;    }
 &nbsp;}
 </code>
 </pre>
@@ -71,7 +421,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2025-06-24 08:25</div>
+    <div style="float:right;">generated on 2025-06-27 12:31</div>
 </div>
 </body>
 </html>

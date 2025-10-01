@@ -45,7 +45,7 @@ public class EditarVendedorTest {
         var vendedorCriado = _vendedorRepository.salvar(input).join();
 
 
-        //arrange
+        //assert
         String nomeEditado = "Joao de Souza";
         LocalDate dataNascimentoEditada = LocalDate.parse("2000-01-24");
         String documentoEditado = "720.404.200-02";

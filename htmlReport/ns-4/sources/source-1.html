@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-  <title>Coverage Report > ApagarVendedorUseCase</title>
+  <title>Coverage Report > Resposta</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,10 +19,10 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">br.com.grupocasasbahia.desafiobackend.vendedor.application.usecases</a>
+    <a href="../index.html">br.com.grupocasasbahia.desafiobackend.vendedor.application.response</a>
 </div>
 
-<h1>Coverage Summary for Class: ApagarVendedorUseCase (br.com.grupocasasbahia.desafiobackend.vendedor.application.usecases)</h1>
+<h1>Coverage Summary for Class: Resposta (br.com.grupocasasbahia.desafiobackend.vendedor.application.response)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -37,15 +37,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 <th class="coverageStat 
 ">
-  Branch, %
-</th>
-<th class="coverageStat 
-">
   Line, %
 </th>
 </tr>
 <tr>
-  <td class="name">ApagarVendedorUseCase</td>
+  <td class="name">Resposta</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -59,23 +55,15 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (2/2)
+    (7/7)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    66,7%
+    100%
   </span>
   <span class="absValue">
-    (4/6)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    81,8%
-  </span>
-  <span class="absValue">
-    (9/11)
+    (10/10)
   </span>
 </td>
 </tr>
@@ -87,40 +75,41 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package br.com.grupocasasbahia.desafiobackend.vendedor.application.usecases;
+<code class="sourceCode" id="sourceCode">&nbsp;package br.com.grupocasasbahia.desafiobackend.vendedor.application.response;
 &nbsp;
-&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IApagarVendedor;
-&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IVendedorRepository;
-&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.response.Resposta;
-&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.core.entities.Vendedor;
-&nbsp;import org.springframework.stereotype.Service;
+&nbsp;public class Resposta&lt;T&gt; {
+&nbsp;    private boolean Sucesso;
+&nbsp;    private String Mensagem;
+&nbsp;    private T Dados;
 &nbsp;
-&nbsp;import java.util.concurrent.CompletableFuture;
-&nbsp;
-&nbsp;@Service
-&nbsp;public class ApagarVendedorUseCase implements IApagarVendedor {
-&nbsp;
-&nbsp;    private final IVendedorRepository _repository;
-<b class="fc">&nbsp;    public ApagarVendedorUseCase(IVendedorRepository repository) {</b>
-<b class="fc">&nbsp;        _repository = repository;</b>
+<b class="fc">&nbsp;    public Resposta(boolean sucesso, String mensagem, T dados){</b>
+<b class="fc">&nbsp;        Sucesso = sucesso;</b>
+<b class="fc">&nbsp;        Mensagem = mensagem;</b>
+<b class="fc">&nbsp;        Dados = dados;</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Override
-&nbsp;    public CompletableFuture&lt;Resposta&lt;String&gt;&gt; executeAsync(String matricula) {
-<b class="fc">&nbsp;        Resposta&lt;Vendedor&gt; verificarSeVendedorExiste = _repository.buscarPorMatricula(matricula).join();</b>
+&nbsp;    public static &lt;T&gt; Resposta&lt;T&gt; successo(T data) {
+<b class="fc">&nbsp;        return new Resposta&lt;&gt;(true, &quot;Operação realizada&quot;, data);</b>
+&nbsp;    }
 &nbsp;
-<b class="pc">&nbsp;        if(!verificarSeVendedorExiste.Sucedido())</b>
-<b class="nc">&nbsp;            return CompletableFuture.completedFuture(Resposta.erro(&quot;Falha interna tente novamente&quot;));</b>
+&nbsp;    public static &lt;T&gt; Resposta&lt;T&gt; successo(String mensagem, T data) {
+<b class="fc">&nbsp;        return new Resposta&lt;&gt;(true, mensagem, data);</b>
+&nbsp;    }
 &nbsp;
-<b class="fc">&nbsp;        if(verificarSeVendedorExiste.getDados() == null)</b>
-<b class="fc">&nbsp;            return CompletableFuture.completedFuture(Resposta.erro(&quot;Vendedor não cadastrado&quot;));</b>
+&nbsp;    public static &lt;T&gt; Resposta&lt;T&gt; erro(String message) {
+<b class="fc">&nbsp;        return new Resposta&lt;&gt;(false, message, null);</b>
+&nbsp;    }
 &nbsp;
-<b class="fc">&nbsp;        Resposta&lt;String&gt; resultado = _repository.apagar(matricula).join();</b>
+&nbsp;    public boolean Sucedido() {
+<b class="fc">&nbsp;        return Sucesso;</b>
+&nbsp;    }
 &nbsp;
-<b class="pc">&nbsp;        if(!resultado.Sucedido())</b>
-<b class="nc">&nbsp;            return CompletableFuture.completedFuture(Resposta.erro(&quot;Falha interna tente novamente&quot;));</b>
+&nbsp;    public String getMensagem() {
+<b class="fc">&nbsp;        return Mensagem;</b>
+&nbsp;    }
 &nbsp;
-<b class="fc">&nbsp;        return CompletableFuture.completedFuture(resultado);</b>
+&nbsp;    public T getDados() {
+<b class="fc">&nbsp;        return Dados;</b>
 &nbsp;    }
 &nbsp;}
 </code>
@@ -146,7 +135,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2025-06-24 08:25</div>
+    <div style="float:right;">generated on 2025-06-27 12:31</div>
 </div>
 </body>
 </html>

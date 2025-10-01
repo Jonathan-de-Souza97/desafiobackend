@@ -55,7 +55,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (2/2)
+    (9/9)
   </span>
 </td>
 <td class="coverageStat">
@@ -63,7 +63,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (2/2)
+    (15/15)
   </span>
 </td>
 </tr>
@@ -82,13 +82,25 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;import java.time.LocalDate;
 &nbsp;
-<b class="fc">&nbsp;public record InputCriarVendedor (</b>
-&nbsp;        String nome,
-&nbsp;        LocalDate dataDeNascimento,
-&nbsp;        String documento,
-&nbsp;        String email,
-&nbsp;        TipoDeContratacao tipoDeContratacao,
-&nbsp;        Integer numeroFilial){
+&nbsp;public class InputCriarVendedor {
+&nbsp;    private String nome;
+&nbsp;    private LocalDate dataDeNascimento;
+&nbsp;    private String documento;
+&nbsp;    private String email;
+&nbsp;    private TipoDeContratacao tipoDeContratacao;
+&nbsp;    private Integer numeroFilial;
+&nbsp;
+<b class="fc">&nbsp;    public InputCriarVendedor() {</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public InputCriarVendedor(String nome, LocalDate dataDeNascimento, String documento, String email, TipoDeContratacao tipoDeContratacao, Integer numeroFilial) {</b>
+<b class="fc">&nbsp;        this.nome = nome;</b>
+<b class="fc">&nbsp;        this.dataDeNascimento = dataDeNascimento;</b>
+<b class="fc">&nbsp;        this.documento = documento;</b>
+<b class="fc">&nbsp;        this.email = email;</b>
+<b class="fc">&nbsp;        this.tipoDeContratacao = tipoDeContratacao;</b>
+<b class="fc">&nbsp;        this.numeroFilial = numeroFilial;</b>
+&nbsp;    }
 &nbsp;
 &nbsp;    public Vendedor toEntity(){
 <b class="fc">&nbsp;        return new Vendedor(</b>
@@ -99,6 +111,30 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;                tipoDeContratacao,
 &nbsp;                numeroFilial
 &nbsp;        );
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getNome() {
+<b class="fc">&nbsp;        return nome;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public LocalDate getDataDeNascimento() {
+<b class="fc">&nbsp;        return dataDeNascimento;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getDocumento() {
+<b class="fc">&nbsp;        return documento;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getEmail() {
+<b class="fc">&nbsp;        return email;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public TipoDeContratacao getTipoDeContratacao() {
+<b class="fc">&nbsp;        return tipoDeContratacao;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Integer getNumeroFilial() {
+<b class="fc">&nbsp;        return numeroFilial;</b>
 &nbsp;    }
 &nbsp;}
 </code>
@@ -124,7 +160,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2025-06-24 08:25</div>
+    <div style="float:right;">generated on 2025-06-27 12:31</div>
 </div>
 </body>
 </html>

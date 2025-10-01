@@ -100,7 +100,7 @@ public class VendedorQueryServices implements IVendedorQueryServices {
         if(!vendedores.Sucedido())
             return CompletableFuture.completedFuture(Resposta.erro("Falha interna tente novamente"));
 
-        if(vendedores.getDados().isEmpty())
+        if(vendedores.getDados() == null)
             return CompletableFuture.completedFuture(Resposta.successo(null));
 
         for(Vendedor vendedor : vendedores.getDados()){

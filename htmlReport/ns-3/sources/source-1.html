@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-  <title>Coverage Report > Resposta</title>
+  <title>Coverage Report > OutputProcessamento</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,10 +19,10 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">br.com.grupocasasbahia.desafiobackend.vendedor.application.response</a>
+    <a href="../index.html">br.com.grupocasasbahia.desafiobackend.vendedor.application.outputs</a>
 </div>
 
-<h1>Coverage Summary for Class: Resposta (br.com.grupocasasbahia.desafiobackend.vendedor.application.response)</h1>
+<h1>Coverage Summary for Class: OutputProcessamento (br.com.grupocasasbahia.desafiobackend.vendedor.application.outputs)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -41,7 +41,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">Resposta</td>
+  <td class="name">OutputProcessamento</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -55,7 +55,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (6/6)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
@@ -63,7 +63,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (9/9)
+    (1/1)
   </span>
 </td>
 </tr>
@@ -75,38 +75,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package br.com.grupocasasbahia.desafiobackend.vendedor.application.response;
+<code class="sourceCode" id="sourceCode">&nbsp;package br.com.grupocasasbahia.desafiobackend.vendedor.application.outputs;
 &nbsp;
-&nbsp;public class Resposta&lt;T&gt; {
-&nbsp;    private boolean Sucesso;
-&nbsp;    private String Mensagem;
-&nbsp;    private T Dados;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.core.enums.StatusProcessamento;
 &nbsp;
-<b class="fc">&nbsp;    public Resposta(boolean sucesso, String mensagem, T dados){</b>
-<b class="fc">&nbsp;        Sucesso = sucesso;</b>
-<b class="fc">&nbsp;        Mensagem = mensagem;</b>
-<b class="fc">&nbsp;        Dados = dados;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    public static &lt;T&gt; Resposta&lt;T&gt; successo(T data) {
-<b class="fc">&nbsp;        return new Resposta&lt;&gt;(true, &quot;Operação realizada&quot;, data);</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    public static &lt;T&gt; Resposta&lt;T&gt; erro(String message) {
-<b class="fc">&nbsp;        return new Resposta&lt;&gt;(false, message, null);</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    public boolean Sucedido() {
-<b class="fc">&nbsp;        return Sucesso;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    public String getMensagem() {
-<b class="fc">&nbsp;        return Mensagem;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    public T getDados() {
-<b class="fc">&nbsp;        return Dados;</b>
-&nbsp;    }
+<b class="fc">&nbsp;public record OutputProcessamento (String requisicaoId, StatusProcessamento statusProcessamento, String mensagem) {</b>
 &nbsp;}
 </code>
 </pre>
@@ -131,7 +104,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2025-06-24 08:25</div>
+    <div style="float:right;">generated on 2025-06-27 12:31</div>
 </div>
 </body>
 </html>

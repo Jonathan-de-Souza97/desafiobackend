@@ -1,0 +1,238 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > VendedorController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">br.com.grupocasasbahia.desafiobackend.vendedor.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: VendedorController (br.com.grupocasasbahia.desafiobackend.vendedor.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">VendedorController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (13/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65,9%
+  </span>
+  <span class="absValue">
+    (29/44)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91,1%
+  </span>
+  <span class="absValue">
+    (41/45)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package br.com.grupocasasbahia.desafiobackend.vendedor.controller;
+&nbsp;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.inputs.InputCriarVendedor;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.inputs.InputEditarVendedor;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IApagarVendedor;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.ICriarVendedor;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IEditarVendedor;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IVendedorQueryServices;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.outputs.OutputVendedor;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.response.Resposta;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.concurrent.CompletableFuture;
+&nbsp;
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;/api/v1/vendedor&quot;)
+&nbsp;
+&nbsp;public class VendedorController {
+&nbsp;    private final ICriarVendedor _criarVendedorUseCase;
+&nbsp;    private final IEditarVendedor _editarVendedorUseCase;
+&nbsp;    private final IApagarVendedor _apagarVendedorUseCase;
+&nbsp;    private final IVendedorQueryServices _queryServices;
+&nbsp;
+<b class="fc">&nbsp;    public VendedorController(ICriarVendedor useCaseCriarVendedor, IEditarVendedor editarVendedorUseCase, IApagarVendedor apagarVendedorUseCase, IVendedorQueryServices queryServices) {</b>
+<b class="fc">&nbsp;        _criarVendedorUseCase = useCaseCriarVendedor;</b>
+<b class="fc">&nbsp;        _editarVendedorUseCase = editarVendedorUseCase;</b>
+<b class="fc">&nbsp;        _apagarVendedorUseCase = apagarVendedorUseCase;</b>
+<b class="fc">&nbsp;        _queryServices = queryServices;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PostMapping()
+&nbsp;    public CompletableFuture&lt;ResponseEntity&lt;Resposta&lt;String&gt;&gt;&gt; criar(@RequestBody InputCriarVendedor input){
+<b class="fc">&nbsp;        return _criarVendedorUseCase.executeAsync(input)</b>
+<b class="fc">&nbsp;                .thenApply(resposta -&gt; {</b>
+<b class="pc">&nbsp;                    if(!resposta.Sucedido() &amp;&amp; resposta.getMensagem().equals(&quot;Falha interna tente novamente&quot;)){</b>
+<b class="nc">&nbsp;                        return ResponseEntity.status(500).body(resposta);</b>
+&nbsp;                    }
+<b class="pc">&nbsp;                    else if(!resposta.Sucedido() &amp;&amp; !resposta.getMensagem().equals(&quot;Falha interna tente novamente&quot;)){</b>
+<b class="nc">&nbsp;                        return ResponseEntity.status(400).body(resposta);</b>
+&nbsp;                    }
+&nbsp;                    else{
+<b class="fc">&nbsp;                        return ResponseEntity.status(200).body(resposta);</b>
+&nbsp;                    }
+&nbsp;                });
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping()
+&nbsp;    public CompletableFuture&lt;ResponseEntity&lt;Resposta&lt;String&gt;&gt;&gt; editar(@RequestBody InputEditarVendedor input){
+<b class="fc">&nbsp;        return _editarVendedorUseCase.executeAsync(input)</b>
+<b class="fc">&nbsp;                .thenApply(resposta -&gt; {</b>
+<b class="fc">&nbsp;                    if(!resposta.Sucedido() &amp;&amp; resposta.getMensagem().equals(&quot;Falha interna tente novamente&quot;)){</b>
+<b class="fc">&nbsp;                        return ResponseEntity.status(500).body(resposta);</b>
+&nbsp;                    }
+<b class="pc">&nbsp;                    else if(!resposta.Sucedido() &amp;&amp; !resposta.getMensagem().equals(&quot;Falha interna tente novamente&quot;)){</b>
+<b class="fc">&nbsp;                        return ResponseEntity.status(400).body(resposta);</b>
+&nbsp;                    }
+&nbsp;                    else{
+<b class="fc">&nbsp;                        return ResponseEntity.status(200).body(resposta);</b>
+&nbsp;                    }
+&nbsp;                });
+&nbsp;    }
+&nbsp;
+&nbsp;    @DeleteMapping(&quot;/{matricula}&quot;)
+&nbsp;    public CompletableFuture&lt;ResponseEntity&lt;Resposta&lt;String&gt;&gt;&gt; apagar(@PathVariable String matricula){
+<b class="fc">&nbsp;        return _apagarVendedorUseCase.executeAsync(matricula)</b>
+<b class="fc">&nbsp;                .thenApply(resposta -&gt; {</b>
+<b class="fc">&nbsp;                    if(!resposta.Sucedido() &amp;&amp; resposta.getMensagem().equals(&quot;Falha interna tente novamente&quot;)){</b>
+<b class="fc">&nbsp;                        return ResponseEntity.status(500).body(resposta);</b>
+&nbsp;                    }
+<b class="pc">&nbsp;                    else if(!resposta.Sucedido() &amp;&amp; !resposta.getMensagem().equals(&quot;Falha interna tente novamente&quot;)){</b>
+<b class="fc">&nbsp;                        return ResponseEntity.status(400).body(resposta);</b>
+&nbsp;                    }
+&nbsp;                    else{
+<b class="fc">&nbsp;                        return ResponseEntity.status(200).body(resposta);</b>
+&nbsp;                    }
+&nbsp;                });
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping()
+&nbsp;    public CompletableFuture&lt;ResponseEntity&lt;Resposta&lt;List&lt;OutputVendedor&gt;&gt;&gt;&gt; buscarTodos(){
+<b class="fc">&nbsp;        return _queryServices.buscarTodosVendedoresAsync()</b>
+<b class="fc">&nbsp;                .thenApply(resposta -&gt; {</b>
+<b class="pc">&nbsp;                    if(!resposta.Sucedido() &amp;&amp; resposta.getMensagem().equals(&quot;Falha interna tente novamente&quot;)){</b>
+<b class="fc">&nbsp;                        return ResponseEntity.status(500).body(resposta);</b>
+&nbsp;                    }
+<b class="pc">&nbsp;                    else if(resposta.Sucedido() &amp;&amp; resposta.getDados() == null){</b>
+<b class="nc">&nbsp;                        return ResponseEntity.status(200).body(resposta);</b>
+&nbsp;                    }
+&nbsp;                    else{
+<b class="fc">&nbsp;                        return ResponseEntity.status(200).body(resposta);</b>
+&nbsp;                    }
+&nbsp;                });
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;/matricula/{matricula}&quot;)
+&nbsp;    public CompletableFuture&lt;ResponseEntity&lt;Resposta&lt;OutputVendedor&gt;&gt;&gt; buscarPorMatricula(@PathVariable String matricula){
+<b class="fc">&nbsp;        return _queryServices.buscarVendedorPorMatriculaAsync(matricula)</b>
+<b class="fc">&nbsp;                .thenApply(resposta -&gt; {</b>
+<b class="pc">&nbsp;                    if(!resposta.Sucedido() &amp;&amp; resposta.getMensagem().equals(&quot;Falha interna tente novamente&quot;))</b>
+<b class="fc">&nbsp;                        return ResponseEntity.status(500).body(resposta);</b>
+&nbsp;
+<b class="fc">&nbsp;                    return ResponseEntity.status(200).body(resposta);</b>
+&nbsp;                });
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;/documento/{documento}&quot;)
+&nbsp;    public CompletableFuture&lt;ResponseEntity&lt;Resposta&lt;List&lt;OutputVendedor&gt;&gt;&gt;&gt; buscarPorDocumento(@PathVariable String documento){
+<b class="fc">&nbsp;        return _queryServices.buscarVendedorPorDocumentoAsync(documento)</b>
+<b class="fc">&nbsp;                .thenApply(resposta -&gt; {</b>
+<b class="pc">&nbsp;                    if(!resposta.Sucedido() &amp;&amp; resposta.getMensagem().equals(&quot;Falha interna tente novamente&quot;)){</b>
+<b class="fc">&nbsp;                        return ResponseEntity.status(500).body(resposta);</b>
+&nbsp;                    }
+<b class="pc">&nbsp;                    else if(resposta.Sucedido() &amp;&amp; resposta.getDados() == null){</b>
+<b class="nc">&nbsp;                        return ResponseEntity.status(200).body(resposta);</b>
+&nbsp;                    }
+&nbsp;
+<b class="fc">&nbsp;                    return ResponseEntity.status(200).body(resposta);</b>
+&nbsp;                });
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-27 12:31</div>
+</div>
+</body>
+</html>

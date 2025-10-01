@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-  <title>Coverage Report > VendedorRepository</title>
+  <title>Coverage Report > ProcessoStatusController</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,15 +19,18 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">br.com.grupocasasbahia.desafiobackend.vendedor.infra.repository</a>
+    <a href="../index.html">br.com.grupocasasbahia.desafiobackend.vendedor.controller</a>
 </div>
 
-<h1>Coverage Summary for Class: VendedorRepository (br.com.grupocasasbahia.desafiobackend.vendedor.infra.repository)</h1>
+<h1>Coverage Summary for Class: ProcessoStatusController (br.com.grupocasasbahia.desafiobackend.vendedor.controller)</h1>
 
 <table class="coverageStats">
-
 <tr>
   <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
 <th class="coverageStat 
 ">
   Method, %
@@ -42,62 +45,41 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">VendedorRepository</td>
-<td class="coverageStat">
-  <span class="percent">
-    90,9%
-  </span>
-  <span class="absValue">
-    (10/11)
-  </span>
-</td>
+  <td class="name">ProcessoStatusController</td>
 <td class="coverageStat">
   <span class="percent">
     100%
   </span>
   <span class="absValue">
-    (4/4)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    88,5%
+    33,3%
   </span>
   <span class="absValue">
-    (54/61)
+    (1/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    28,6%
+  </span>
+  <span class="absValue">
+    (2/7)
   </span>
 </td>
 </tr>
-  <tr>
-    <td class="name">VendedorRepository$$SpringCGLIB$$0</td>
-  </tr>
-<tr>
-  <td class="name"><strong>Total</strong></td>
-<td class="coverageStat">
-  <span class="percent">
-    90,9%
-  </span>
-  <span class="absValue">
-    (10/11)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (4/4)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    88,5%
-  </span>
-  <span class="absValue">
-    (54/61)
-  </span>
-</td>
-</tr>
+
 </table>
 
 <br/>
@@ -105,172 +87,41 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package br.com.grupocasasbahia.desafiobackend.vendedor.infra.repository;
+<code class="sourceCode" id="sourceCode">&nbsp;package br.com.grupocasasbahia.desafiobackend.vendedor.controller;
 &nbsp;
-&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.interfaces.IVendedorRepository;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.outputs.OutputProcessamento;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.outputs.OutputVendedor;
 &nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.response.Resposta;
-&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.core.entities.Vendedor;
-&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.core.enums.TipoDeContratacao;
-&nbsp;import org.springframework.jdbc.core.JdbcTemplate;
-&nbsp;import org.springframework.jdbc.datasource.SingleConnectionDataSource;
-&nbsp;import org.springframework.stereotype.Repository;
+&nbsp;import br.com.grupocasasbahia.desafiobackend.vendedor.application.services.ProcessarQueryServices;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.stereotype.Controller;
+&nbsp;import org.springframework.web.bind.annotation.GetMapping;
+&nbsp;import org.springframework.web.bind.annotation.PathVariable;
+&nbsp;import org.springframework.web.bind.annotation.RequestMapping;
+&nbsp;import org.springframework.web.bind.annotation.RestController;
 &nbsp;
-&nbsp;import java.sql.Connection;
-&nbsp;import java.util.List;
 &nbsp;import java.util.concurrent.CompletableFuture;
 &nbsp;
-&nbsp;@Repository
-&nbsp;public class VendedorRepository implements IVendedorRepository {
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;/api/v1/statusdoprocesso&quot;)
+&nbsp;public class ProcessoStatusController {
 &nbsp;
-&nbsp;    private final JdbcTemplate _conexao;
+&nbsp;    private final ProcessarQueryServices _queryService;
 &nbsp;
-<b class="fc">&nbsp;    public VendedorRepository(JdbcTemplate conexao) {</b>
-<b class="fc">&nbsp;        _conexao = conexao;</b>
+<b class="fc">&nbsp;    public ProcessoStatusController(ProcessarQueryServices queryService) {</b>
+<b class="fc">&nbsp;        _queryService = queryService;</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Override
-&nbsp;    public CompletableFuture&lt;Resposta&lt;Vendedor&gt;&gt; buscarPorMatricula(String matricula) {
-<b class="fc">&nbsp;        String query = &quot;SELECT * FROM vendedor WHERE matricula = ?&quot;;</b>
+&nbsp;    @GetMapping(&quot;/{requisicaoId}&quot;)
+&nbsp;    public CompletableFuture&lt;ResponseEntity&lt;Resposta&lt;OutputProcessamento&gt;&gt;&gt; buscarPorRequisicaoId(@PathVariable String requisicaoId){
 &nbsp;
-&nbsp;        try {
-<b class="fc">&nbsp;            List&lt;Vendedor&gt; vendedor = _conexao.query(</b>
-&nbsp;                    query,
-&nbsp;                    new Object[]{matricula},
-<b class="fc">&nbsp;                    (rs, rowNum) -&gt; new Vendedor(</b>
-<b class="fc">&nbsp;                            rs.getString(&quot;matricula&quot;),</b>
-<b class="fc">&nbsp;                            rs.getString(&quot;nome&quot;),</b>
-<b class="fc">&nbsp;                            rs.getDate(&quot;datadenascimento&quot;).toLocalDate(),</b>
-<b class="fc">&nbsp;                            rs.getString(&quot;documento&quot;),</b>
-<b class="fc">&nbsp;                            rs.getString(&quot;email&quot;),</b>
-<b class="fc">&nbsp;                            TipoDeContratacao.valueOf(rs.getString(&quot;tipodecontratacao&quot;)),</b>
-<b class="fc">&nbsp;                            rs.getInt(&quot;numerofilial&quot;))</b>
-&nbsp;            );
+<b class="nc">&nbsp;        return _queryService.buscarPorRequisicaoId(requisicaoId)</b>
+<b class="nc">&nbsp;                .thenApply(resposta -&gt; {</b>
+<b class="nc">&nbsp;                    if(!resposta.Sucedido() &amp;&amp; resposta.getMensagem().equals(&quot;Falha interna tente novamente&quot;))</b>
+<b class="nc">&nbsp;                        return ResponseEntity.status(500).body(resposta);</b>
 &nbsp;
-<b class="fc">&nbsp;            if(vendedor.isEmpty())</b>
-<b class="fc">&nbsp;                return CompletableFuture.completedFuture(Resposta.successo(null));</b>
-&nbsp;
-<b class="fc">&nbsp;            return CompletableFuture.completedFuture(Resposta.successo(vendedor.get(0)));</b>
-&nbsp;
-&nbsp;        } catch (Exception e) {
-<b class="nc">&nbsp;            return CompletableFuture.completedFuture(Resposta.erro(&quot;Erro ao buscar vendedor: &quot; + e.getMessage()));</b>
-&nbsp;        }
-&nbsp;    }
-&nbsp;
-&nbsp;    @Override
-&nbsp;    public CompletableFuture&lt;Resposta&lt;Vendedor&gt;&gt; buscarPorDocumento(String documento) {
-<b class="fc">&nbsp;        String query = &quot;SELECT * FROM vendedor WHERE documento = ?&quot;;</b>
-&nbsp;        try {
-<b class="fc">&nbsp;            List&lt;Vendedor&gt; vendedor = _conexao.query(query, new Object[]{documento}, (rs,rowNum) -&gt;</b>
-<b class="fc">&nbsp;                    new Vendedor(rs.getString(&quot;matricula&quot;),</b>
-<b class="fc">&nbsp;                            rs.getString(&quot;nome&quot;),</b>
-<b class="fc">&nbsp;                            rs.getDate(&quot;datadenascimento&quot;).toLocalDate(),</b>
-<b class="fc">&nbsp;                            rs.getString(&quot;documento&quot;),</b>
-<b class="fc">&nbsp;                            rs.getString(&quot;email&quot;),</b>
-<b class="fc">&nbsp;                            TipoDeContratacao.valueOf(rs.getString(&quot;tipodecontratacao&quot;)),</b>
-<b class="fc">&nbsp;                            rs.getInt(&quot;numerofilial&quot;))</b>
-&nbsp;            );
-&nbsp;
-<b class="fc">&nbsp;            if(vendedor.isEmpty())</b>
-<b class="fc">&nbsp;                return CompletableFuture.completedFuture(Resposta.successo(null));</b>
-&nbsp;
-<b class="fc">&nbsp;            return CompletableFuture.completedFuture(Resposta.successo(vendedor.get(0)));</b>
-&nbsp;        }
-&nbsp;        catch (Exception ex){
-<b class="nc">&nbsp;            return CompletableFuture.completedFuture(Resposta.erro(&quot;Erro ao buscar vendedor:&quot; + ex.getMessage()));</b>
-&nbsp;        }
-&nbsp;    }
-&nbsp;
-&nbsp;    @Override
-&nbsp;    public CompletableFuture&lt;Resposta&lt;List&lt;Vendedor&gt;&gt;&gt; buscarTodos() {
-<b class="nc">&nbsp;        return null;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    @Override
-&nbsp;    public CompletableFuture&lt;Resposta&lt;Integer&gt;&gt; buscarNovaMatricula() {
-<b class="fc">&nbsp;        String querySelect = &quot;SELECT ultimocodigo FROM controlesequenciamentomatricula FOR UPDATE&quot;;</b>
-<b class="fc">&nbsp;        String queryUpdate = &quot;UPDATE controlesequenciamentomatricula SET ultimocodigo = ?&quot;;</b>
-&nbsp;
-&nbsp;        try {
-<b class="fc">&nbsp;            Connection connection = _conexao.getDataSource().getConnection();</b>
-<b class="fc">&nbsp;            connection.setAutoCommit(false);</b>
-&nbsp;
-<b class="fc">&nbsp;            JdbcTemplate jdbcComTransacao = new JdbcTemplate(new SingleConnectionDataSource(connection, true));</b>
-&nbsp;
-<b class="fc">&nbsp;            List&lt;Integer&gt; resultado = jdbcComTransacao.query(</b>
-&nbsp;                    querySelect,
-&nbsp;                    new Object[]{},
-<b class="fc">&nbsp;                    (rs, rowNum) -&gt; rs.getInt(&quot;ultimocodigo&quot;)</b>
-&nbsp;            );
-&nbsp;
-<b class="fc">&nbsp;            int novoCodigo = resultado.get(0) + 1;</b>
-&nbsp;
-<b class="fc">&nbsp;            jdbcComTransacao.update(queryUpdate, novoCodigo);</b>
-&nbsp;
-<b class="fc">&nbsp;            connection.commit();</b>
-&nbsp;            connection.close();
-&nbsp;
-<b class="fc">&nbsp;            return CompletableFuture.completedFuture(Resposta.successo(novoCodigo));</b>
-&nbsp;
-&nbsp;        } catch (Exception e) {
-<b class="nc">&nbsp;            return CompletableFuture.completedFuture(Resposta.erro(&quot;Erro ao buscar nova matrícula: &quot; + e.getMessage()));</b>
-&nbsp;        }
-&nbsp;    }
-&nbsp;
-&nbsp;    @Override
-&nbsp;    public CompletableFuture&lt;Resposta&lt;String&gt;&gt; salvar(Vendedor vendedor) {
-<b class="fc">&nbsp;        String query = &quot;INSERT INTO vendedor (id, matricula, nome, datadenascimento, documento, email, tipodecontratacao,numerofilial)&quot; +</b>
-&nbsp;                       &quot; VALUES &quot; +
-&nbsp;                       &quot;(?,?,?,?,?,?,?,?)&quot;;
-&nbsp;        try{
-<b class="fc">&nbsp;            _conexao.update(query, new Object[]{vendedor.getId(), vendedor.getMatricula(), vendedor.getNome(),vendedor.getDataDeNascimento(),</b>
-<b class="fc">&nbsp;                    vendedor.getDocumento(), vendedor.getEmail(), vendedor.getTipoDeContratacao().name(), vendedor.getnumeroFilial()});</b>
-&nbsp;
-<b class="fc">&nbsp;            return CompletableFuture.completedFuture(Resposta.successo((vendedor.getMatricula())));</b>
-&nbsp;        }
-&nbsp;        catch (Exception ex){
-<b class="nc">&nbsp;            return CompletableFuture.completedFuture(Resposta.erro(&quot;Falha ao salvar vendedor: &quot; + ex.getMessage()));</b>
-&nbsp;        }
-&nbsp;    }
-&nbsp;
-&nbsp;    @Override
-&nbsp;    public CompletableFuture&lt;Resposta&lt;String&gt;&gt; editar(Vendedor vendedor) {
-<b class="fc">&nbsp;        String query = &quot;UPDATE vendedor SET &quot; +</b>
-&nbsp;                       &quot;nome = ?, &quot; +
-&nbsp;                       &quot;datadenascimento = ?, &quot; +
-&nbsp;                       &quot;documento = ?, &quot; +
-&nbsp;                       &quot;email = ?, &quot; +
-&nbsp;                       &quot;tipodecontratacao = ?, &quot; +
-&nbsp;                       &quot;numeroFilial = ? &quot; +
-&nbsp;                       &quot;WHERE matricula = ?&quot;;
-&nbsp;
-&nbsp;        try{
-<b class="fc">&nbsp;            _conexao.update(query, new Object[]{vendedor.getNome(),</b>
-<b class="fc">&nbsp;                    vendedor.getDataDeNascimento(),</b>
-<b class="fc">&nbsp;                    vendedor.getDocumento(),</b>
-<b class="fc">&nbsp;                    vendedor.getEmail(),</b>
-<b class="fc">&nbsp;                    vendedor.getTipoDeContratacao().name(),</b>
-<b class="fc">&nbsp;                    vendedor.getnumeroFilial(),</b>
-<b class="fc">&nbsp;                    vendedor.getMatricula()});</b>
-&nbsp;
-<b class="fc">&nbsp;            return CompletableFuture.completedFuture(Resposta.successo(vendedor.getMatricula()));</b>
-&nbsp;        }
-&nbsp;        catch (Exception ex){
-<b class="nc">&nbsp;            return CompletableFuture.completedFuture(Resposta.erro(&quot;Falha ao editar vendedor: &quot; + ex.getMessage()));</b>
-&nbsp;        }
-&nbsp;    }
-&nbsp;
-&nbsp;    @Override
-&nbsp;    public CompletableFuture&lt;Resposta&lt;String&gt;&gt; apagar(String matricula) {
-<b class="fc">&nbsp;        String query = &quot;DELETE FROM vendedor WHERE matricula = ?&quot;;</b>
-&nbsp;
-&nbsp;        try{
-<b class="fc">&nbsp;            _conexao.update(query,new Object[]{matricula});</b>
-&nbsp;
-<b class="fc">&nbsp;            return CompletableFuture.completedFuture(Resposta.successo(matricula));</b>
-&nbsp;        }
-&nbsp;        catch (Exception ex){
-<b class="nc">&nbsp;            return CompletableFuture.completedFuture(Resposta.erro(&quot;Falha ao apagar vendedor&quot;));</b>
-&nbsp;        }
+<b class="nc">&nbsp;                    return ResponseEntity.status(200).body(resposta);</b>
+&nbsp;                });
 &nbsp;    }
 &nbsp;}
 </code>
@@ -296,7 +147,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2025-06-24 08:25</div>
+    <div style="float:right;">generated on 2025-06-27 12:31</div>
 </div>
 </body>
 </html>
